@@ -6,6 +6,9 @@ import { publicEnv, isSupabaseConfigured } from "@/lib/env";
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
   if (!isSupabaseConfigured()) return response;
+  const p = request.nextUrl.pathname;
+  const needsSession = p.startsWith("/portal") || p === "/select-role" || p.startsWith("/login") || p.startsWith("/auth") || p.startsWith("/api") || p === "/reset-password";
+  if (!needsSession) return response; // public website pages: no auth work at all
 
   const supabase = createServerClient(publicEnv.supabaseUrl, publicEnv.supabaseAnonKey, {
     cookies: {

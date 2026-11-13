@@ -8,6 +8,7 @@ import {
   type Portal, type Role, canEnterPortal, isRole, portalsForRoles, portalForRole, PRIVILEGED_ROLES,
 } from "./roles";
 import { hasPermission, type Permission } from "./permissions";
+import { getSiteSettings } from "@/lib/data/site";
 
 export type SessionUser = {
   id: string;
@@ -25,24 +26,24 @@ export const ACTIVE_ROLE_COOKIE = "active_portal";
 export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
   if (!isSupabaseConfigured()) return null;
   const supabase = await createClient();
-  const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) return null;
+  // getClaims() verifies the JWT signature (locally with the project's signing
+  // keys; via the Auth server for legacy keys) — no extra network hop per page.
+  const { data: claimsData } = await supabase.auth.getClaims();
+  const userId = claimsData?.claims?.sub;
+  if (!userId) return null;
 
-  const [{ data: profile }, { data: roleRows }] = await Promise.all([
-    supabase.from("profiles").select("full_name, email, avatar_path, is_active").eq("id", auth.user.id).maybeSingle(),
-    supabase.from("user_roles").select("role").eq("user_id", auth.user.id),
+  // One parallel round trip: profile + roles (embedded) + the small permission map.
+  const [{ data: profile }, { data: perms }] = await Promise.all([
+    supabase.from("profiles").select("full_name, email, avatar_path, is_active, user_roles!user_roles_user_id_fkey(role)").eq("id", userId).maybeSingle(),
+    supabase.from("role_permissions").select("role, permission_key"),
   ]);
   if (!profile || !profile.is_active) return null;
 
-  const roles = (roleRows ?? []).map((r) => r.role).filter(isRole);
-  let permissions = new Set<string>();
-  if (roles.length) {
-    const { data: perms } = await supabase.from("role_permissions").select("permission_key").in("role", roles);
-    permissions = new Set((perms ?? []).map((p) => p.permission_key as string));
-  }
+  const roles = ((profile.user_roles ?? []) as { role: string }[]).map((r) => r.role).filter(isRole);
+  const permissions = new Set((perms ?? []).filter((p) => (roles as string[]).includes(p.role)).map((p) => p.permission_key as string));
   return {
-    id: auth.user.id,
-    email: profile.email ?? auth.user.email ?? "",
+    id: userId,
+    email: profile.email ?? (claimsData?.claims?.email as string | undefined) ?? "",
     fullName: profile.full_name,
     avatarPath: profile.avatar_path,
     roles,
@@ -63,8 +64,8 @@ export async function enforceMfa(user: SessionUser, opts: { allowSetup?: boolean
   const { data } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
   if (data && data.nextLevel === "aal2" && data.currentLevel !== "aal2") redirect("/login/mfa");
   if (!opts.allowSetup && data && data.nextLevel !== "aal2" && user.roles.some((r) => PRIVILEGED_ROLES.includes(r))) {
-    const { data: settings } = await supabase.from("site_settings").select("require_mfa_privileged").eq("id", 1).maybeSingle();
-    if (settings?.require_mfa_privileged) redirect("/portal/account/security?required=1");
+    const settings = await getSiteSettings();
+    if (settings.require_mfa_privileged) redirect("/portal/account/security?required=1");
   }
 }
 

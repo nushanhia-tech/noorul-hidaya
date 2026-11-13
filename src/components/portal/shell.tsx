@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { ArrowLeftRight, LogOut, Settings } from "lucide-react";
 import { Emblem } from "@/components/site/brand";
 import { Avatar } from "@/components/ui/misc";
@@ -75,7 +76,9 @@ export async function PortalShell({ user, portal, children }: { user: SessionUse
           </Link>
           <p className="hidden text-sm text-muted lg:block">{settings.college_name}</p>
           <div className="flex items-center gap-2">
-            <NotificationBell userId={user.id} portal={portal} />
+            <Suspense fallback={<span className="inline-block h-10 w-10 rounded-sm border border-line bg-white" aria-hidden />}>
+              <NotificationBell userId={user.id} portal={portal} />
+            </Suspense>
             <Link href="/portal/account" className="lg:hidden" aria-label="Account settings">
               <Avatar name={user.fullName} src={mediaUrl(user.avatarPath)} size={34} />
             </Link>
