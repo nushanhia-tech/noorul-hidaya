@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { redirect } from "next/navigation";
 import { ArrowRight, Briefcase, GraduationCap, LayoutDashboard, School, Users } from "lucide-react";
 import { AuthShell } from "@/components/auth/auth-shell";

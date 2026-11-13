@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { MfaForm } from "./form";
 
