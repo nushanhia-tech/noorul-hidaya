@@ -177,7 +177,10 @@ begin
   if tg_op = 'INSERT' and v_cancelled is not null then
     raise exception 'Invoice is cancelled';
   end if;
-  if new.status = 'verified' and new.mode = 'live'
+  -- Counter collections may never exceed the balance. Gateway payments are
+  -- recorded exactly as received (money has already moved); any excess shows
+  -- as a credit that accounts can refund.
+  if new.status = 'verified' and new.mode = 'live' and new.provider is null
      and (tg_op = 'INSERT' or old.status is distinct from 'verified')
      and new.amount > public.invoice_outstanding(new.invoice_id, new.id) then
     raise exception 'Payment of % exceeds outstanding balance of %', new.amount, public.invoice_outstanding(new.invoice_id, new.id)

@@ -58,11 +58,11 @@ export async function requireUser(): Promise<SessionUser> {
 }
 
 /** Enforce MFA rules for the current session (aal2 when a factor exists; setup when required). */
-export async function enforceMfa(user: SessionUser) {
+export async function enforceMfa(user: SessionUser, opts: { allowSetup?: boolean } = {}) {
   const supabase = await createClient();
   const { data } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
   if (data && data.nextLevel === "aal2" && data.currentLevel !== "aal2") redirect("/login/mfa");
-  if (data && data.nextLevel !== "aal2" && user.roles.some((r) => PRIVILEGED_ROLES.includes(r))) {
+  if (!opts.allowSetup && data && data.nextLevel !== "aal2" && user.roles.some((r) => PRIVILEGED_ROLES.includes(r))) {
     const { data: settings } = await supabase.from("site_settings").select("require_mfa_privileged").eq("id", 1).maybeSingle();
     if (settings?.require_mfa_privileged) redirect("/portal/account/security?required=1");
   }
