@@ -187,6 +187,22 @@ export async function setLinkStatus(linkId: string, parentId: string, status: "a
   revalidatePath(`/portal/admin/users/${parentId}`);
 }
 
+/** Re-send the invitation email to a user who has not accepted it yet. */
+export async function resendInvite(userId: string, email: string): Promise<ActionResult> {
+  try {
+    const me = await assertPermission("users.manage");
+    const admin = createAdminClient();
+    const { data: u } = await admin.auth.admin.getUserById(userId);
+    if (u?.user?.last_sign_in_at || u?.user?.email_confirmed_at && u.user.last_sign_in_at) {
+      return { ok: false, error: "This user has already accepted their invitation. Send a password reset link instead." };
+    }
+    const { error } = await admin.auth.admin.inviteUserByEmail(email, { redirectTo: `${publicEnv.siteUrl}/auth/confirm?next=/reset-password` });
+    if (error) return { ok: false, error: error.message };
+    await logSecurityEvent("invite_resent", me.id, { target: userId });
+    return { ok: true, message: `A new invitation has been emailed to ${email}. Old links no longer work.` };
+  } catch (e) { return toActionError(e); }
+}
+
 export async function sendReset(email: string): Promise<ActionResult> {
   try {
     const me = await assertPermission("users.manage");

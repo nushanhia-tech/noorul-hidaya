@@ -10,7 +10,7 @@ import { StatusBadge } from "@/components/ui/badge";
 import { Notice } from "@/components/ui/misc";
 import type { Role } from "@/lib/auth/roles";
 import { humanize } from "@/lib/format";
-import { linkParent, saveFacultyRecord, saveStudentRecord, sendReset, setLinkStatus, setRoles, updateAccount } from "../actions";
+import { linkParent, resendInvite, saveFacultyRecord, saveStudentRecord, sendReset, setLinkStatus, setRoles, updateAccount } from "../actions";
 import { FacultyFields, RoleCheckboxes, SectionFields, StudentFields, type Lookups } from "../role-fields";
 
 type Props = {
@@ -45,6 +45,10 @@ export function UserDetail({ profile, roles, student, faculty, lk, sections, can
               const r = await sendReset(profile.email!);
               setResetMsg(r.ok ? { ok: true, text: r.message ?? "Sent" } : { ok: false, text: r.error });
             })}>Send password reset link</Button>
+            <Button variant="ghost" className="ml-2 mt-3" disabled={pending || !profile.email} onClick={() => start(async () => {
+              const r = await resendInvite(profile.id, profile.email!);
+              setResetMsg(r.ok ? { ok: true, text: r.message ?? "Sent" } : { ok: false, text: r.error });
+            })}>Resend invitation</Button>
           </CardBody>
         </Card>
         <Card>
