@@ -60,6 +60,10 @@ export function SettingsForm({ s }: { s: SiteSettings }) {
         <CardBody><F name="backup_notes" label="Backup status & notes"><Textarea name="backup_notes" rows={4} defaultValue={s.backup_notes ?? ""} placeholder="e.g. Daily PITR enabled on Pro plan; weekly pg_dump to offsite storage verified on…" /></F></CardBody>
       </Card>
       <div><SubmitButton size="lg">Save settings</SubmitButton></div>
+      <Card className="border-danger/30">
+        <CardHeader title="Danger zone" description="Delete all data and start again with an empty system." />
+        <CardBody><a href="/portal/admin/settings/reset" className="inline-flex h-10 items-center rounded-sm bg-danger px-4 text-sm font-medium text-white hover:bg-danger/90">Full site reset…</a></CardBody>
+      </Card>
     </ActionForm>
   );
 }

@@ -15,7 +15,9 @@ export function toActionError(err: unknown): ActionResult<never> {
       const key = issue.path.join(".");
       if (!fieldErrors[key]) fieldErrors[key] = issue.message;
     }
-    return { ok: false, error: "Please correct the highlighted fields.", fieldErrors };
+    const label = (k: string) => k.replace(/_id$/, "").replace(/_/g, " ");
+    const details = Object.entries(fieldErrors).slice(0, 4).map(([k, m]) => `${label(k) || "form"}: ${m}`).join(" · ");
+    return { ok: false, error: `Please correct the highlighted fields — ${details}`, fieldErrors };
   }
   if (err instanceof AuthError) return { ok: false, error: err.message };
   const e = err as { code?: string; message?: string };
