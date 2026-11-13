@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-ivory: #f3f1ec;
+  --color-paper: #faf9f6;
+  --color-sand: #ebe7df;
+  --color-line: #e2ddd3;
+  --color-line-strong: #cfc8bb;
+  --color-ink: #1a1916;
+  --color-ink-soft: #3a3833;
+  --color-muted: #6b675f;
+  --color-faint: #9a958b;
+
+  --color-accent: #e8691e;
+  --color-accent-600: #cf5812;
+  --color-accent-700: #a9450c;
+  --color-accent-50: #fdf2ea;
+  --color-accent-100: #fbe0cd;
+
+  --color-royal: #4a4ddb;
+  --color-royal-600: #3b3ec4;
+  --color-royal-50: #eeeefc;
+  --color-teal: #0e6b61;
+  --color-teal-50: #e6f2f0;
+  --color-plum: #6b4a7a;
+  --color-plum-50: #f3eef5;
+
+  --color-success: #2f7a4b;
+  --color-success-50: #e9f4ed;
+  --color-warning: #a8620b;
+  --color-warning-50: #fbf1e1;
+  --color-danger: #b4372b;
+  --color-danger-50: #fbecea;
+
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --shadow-card: 0 1px 0 rgb(26 25 22 / 0.03), 0 1px 2px rgb(26 25 22 / 0.04);
+  --shadow-pop: 0 12px 32px -8px rgb(26 25 22 / 0.18), 0 2px 6px rgb(26 25 22 / 0.06);
+
+  --animate-fade-in: fade-in 0.35s ease-out both;
+  --animate-rise: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
+@keyframes rise { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; text-rendering: optimizeLegibility; }
+  body {
+    background: var(--color-ivory);
+    color: var(--color-ink);
+    font-feature-settings: "cv11", "ss01", "ss03";
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--color-accent-100); color: var(--color-ink); }
+  :focus-visible { outline: 2px solid var(--color-royal); outline-offset: 2px; border-radius: 2px; }
+  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+@layer components {
+  .display-xl { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.045em; line-height: 0.98; }
+  .eyebrow { font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.01em; color: var(--color-teal); }
+  .prose-college { color: var(--color-ink-soft); line-height: 1.75; }
+  .prose-college p + p { margin-top: 1rem; }
+  .prose-college h2 { font-size: 1.375rem; font-weight: 600; color: var(--color-ink); margin: 2rem 0 0.75rem; }
+  .prose-college h3 { font-size: 1.125rem; font-weight: 600; color: var(--color-ink); margin: 1.5rem 0 0.5rem; }
+  .prose-college ul { list-style: disc; padding-left: 1.25rem; margin: 0.75rem 0; }
+  .prose-college li + li { margin-top: 0.35rem; }
+  .prose-college a { color: var(--color-royal); text-decoration: underline; text-underline-offset: 3px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+  .scrollbar-none { scrollbar-width: none; }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+}
