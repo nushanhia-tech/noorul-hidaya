@@ -183,6 +183,9 @@ create policy profiles_update on public.profiles for update to authenticated
 
 create policy user_roles_select on public.user_roles for select to authenticated
   using (user_id = auth.uid() or public.has_permission('users.manage') or public.has_permission('roles.manage'));
+-- Office staff may see which users hold office roles (needed to assign work).
+create policy user_roles_select_office on public.user_roles for select to authenticated
+  using (public.is_office_staff() and role in ('office_clerk','office_superintendent','accountant','office_supervisor'));
 create policy user_roles_insert on public.user_roles for insert to authenticated with check (public.has_permission('roles.manage'));
 create policy user_roles_delete on public.user_roles for delete to authenticated using (public.has_permission('roles.manage'));
 
