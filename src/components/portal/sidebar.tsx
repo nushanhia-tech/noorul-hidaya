@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MoreHorizontal, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ICONS } from "./icons";
@@ -50,8 +50,9 @@ export function SidebarNav({ groups, root }: { groups: NavGroup[]; root: string 
 /** Mobile bottom navigation with a "More" sheet containing the full menu. */
 export function BottomNav({ groups, root, footer }: { groups: NavGroup[]; root: string; footer?: React.ReactNode }) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-  useEffect(() => setOpen(false), [pathname]);
+  const [openOn, setOpenOn] = useState<string | null>(null);
+  const open = openOn === pathname;
+  const setOpen = (v: boolean) => setOpenOn(v ? pathname : null);
   const all = groups.flatMap((g) => g.links);
   const primary: NavLink[] = all.filter((l) => l.mobile).slice(0, 4);
   return (

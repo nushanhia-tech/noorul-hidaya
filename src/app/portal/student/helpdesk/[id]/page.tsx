@@ -7,7 +7,7 @@ import { Card, CardHeader, CardBody } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/badge";
 import { Thread, AttachmentList, type ThreadMessage } from "@/components/portal/thread";
 import { TICKET_CATEGORIES, TICKET_STATUS_LABELS, type TicketCategory } from "@/lib/constants";
-import { formatDateTime } from "@/lib/format";
+import { formatDateTime, nowMs } from "@/lib/format";
 import { ReplyForm, StatusButtons } from "./client";
 
 export const metadata = { title: "Request" };
@@ -23,7 +23,7 @@ export default async function TicketPage({ params }: { params: Promise<{ id: str
     supabase.from("ticket_events").select("id, from_status, to_status, created_at, note").eq("ticket_id", id).order("created_at"),
     listDocuments("ticket", id),
   ]);
-  const canReopen = ["resolved", "closed"].includes(t.status) && new Date(t.resolved_at ?? t.closed_at ?? 0).getTime() > Date.now() - 14 * 86400000;
+  const canReopen = ["resolved", "closed"].includes(t.status) && new Date(t.resolved_at ?? t.closed_at ?? 0).getTime() > nowMs() - 14 * 86400000;
   return (
     <>
       <PageHeader eyebrow={t.ticket_no} title={t.subject} back={{ href: "/portal/student/helpdesk", label: "Help desk" }}

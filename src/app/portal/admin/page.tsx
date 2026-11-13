@@ -8,14 +8,14 @@ import { Badge } from "@/components/ui/badge";
 import { providerStatus } from "@/lib/payments/provider";
 import { isEmailConfigured } from "@/lib/email";
 import { serverEnv } from "@/lib/env";
-import { formatDate, relativeTime, humanize } from "@/lib/format";
+import { formatDate, relativeTime, humanize, nowMs } from "@/lib/format";
 
 export const metadata = { title: "Admin Dashboard" };
 
 export default async function AdminDashboard() {
   const user = await requirePortal("admin");
   const db = await createClient();
-  const t0 = Date.now();
+  const t0 = nowMs();
   const count = (table: string, col?: string, val?: string | boolean) => {
     const q = db.from(table).select("*", { count: "exact", head: true });
     return col ? q.eq(col, val as string) : q;
@@ -36,7 +36,7 @@ export default async function AdminDashboard() {
     db.from("mark_sheets").select("*", { count: "exact", head: true }).eq("status", "submitted"),
   ]);
   void files;
-  const latency = Date.now() - t0;
+  const latency = nowMs() - t0;
   const pay = providerStatus();
   const env = serverEnv();
   const health = [

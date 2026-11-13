@@ -11,14 +11,15 @@ import { markAllNotificationsRead } from "@/app/portal/notifications-actions";
 type Item = { id: string; title: string; body: string; type: string; link: string | null; read_at: string | null; created_at: string };
 
 export function BellPopover({ unread, items, allHref }: { unread: number; items: Item[]; allHref: string }) {
-  const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  useEffect(() => setOpen(false), [pathname]);
+  const [openOn, setOpenOn] = useState<string | null>(null);
+  const open = openOn === pathname;
+  const setOpen = (v: boolean | ((o: boolean) => boolean)) => setOpenOn((typeof v === "function" ? v(open) : v) ? pathname : null);
   useEffect(() => {
     if (!open) return;
     const close = (e: MouseEvent | KeyboardEvent) => {
-      if (e instanceof KeyboardEvent ? e.key === "Escape" : !ref.current?.contains(e.target as Node)) setOpen(false);
+      if (e instanceof KeyboardEvent ? e.key === "Escape" : !ref.current?.contains(e.target as Node)) setOpenOn(null);
     };
     document.addEventListener("mousedown", close);
     document.addEventListener("keydown", close);

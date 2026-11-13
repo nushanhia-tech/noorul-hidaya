@@ -15,7 +15,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
         </Link>
         <div className="min-w-0 flex-1">
           <div className="flex h-[52px] items-stretch border-b border-line">
-            <nav aria-label="Quick links" className="flex items-center gap-7 border-r border-line px-8 text-sm text-ink-soft">
+            <nav aria-label="Utility links" className="flex items-center gap-7 border-r border-line px-8 text-sm text-ink-soft">
               {UTILITY_NAV.map((l) => (
                 <Link key={l.href} href={l.href} className="hover:text-ink">{l.label}</Link>
               ))}

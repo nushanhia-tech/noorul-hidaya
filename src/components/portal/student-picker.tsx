@@ -12,7 +12,7 @@ export function StudentPicker({ name, defaultId, defaultLabel, required }: { nam
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (timer.current) clearTimeout(timer.current);
-    if (q.trim().length < 2) { setResults([]); return; }
+    if (q.trim().length < 2) return;
     timer.current = setTimeout(async () => setResults(await searchStudents(q)), 250);
   }, [q]);
   if (value) {
@@ -29,7 +29,7 @@ export function StudentPicker({ name, defaultId, defaultLabel, required }: { nam
       <input type="hidden" name={name} value="" />
       <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Type a name or register number" required={required} aria-label="Search student"
         className="h-10 w-full rounded-sm border border-line-strong bg-white px-3 text-[15px] focus:border-royal focus:outline-none focus:ring-2 focus:ring-royal/15 sm:text-sm" />
-      {results.length > 0 && (
+      {q.trim().length >= 2 && results.length > 0 && (
         <ul className="absolute z-20 mt-1 max-h-64 w-full overflow-y-auto rounded-sm border border-line bg-paper shadow-pop" role="listbox">
           {results.map((r) => (
             <li key={r.id}><button type="button" role="option" aria-selected={false} onClick={() => { setValue(r); setQ(""); setResults([]); }} className="block w-full px-3 py-2 text-left text-sm hover:bg-ivory">{r.label}</button></li>

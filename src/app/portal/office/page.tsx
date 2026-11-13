@@ -7,7 +7,7 @@ import { StatCard, EmptyState } from "@/components/ui/misc";
 import { StatusBadge } from "@/components/ui/badge";
 import { SimpleBarChart } from "@/components/charts";
 import { formatMoney, collectionTotals } from "@/lib/fees";
-import { formatDate, greeting, relativeTime, todayISO } from "@/lib/format";
+import { daysFromNow, formatDate, greeting, relativeTime, todayISO } from "@/lib/format";
 import { FILE_STATUS_LABELS } from "@/lib/constants";
 
 export const metadata = { title: "Office Dashboard" };
@@ -26,7 +26,7 @@ export default async function OfficeDashboard() {
     can(user, ["files.manage", "files.view_all"]) ? db.from("file_movements").select("id, action, note, created_at, to_status, office_files(id, reference_no, subject), actor:profiles!file_movements_actor_id_fkey(full_name)").order("created_at", { ascending: false }).limit(8) : Promise.resolve({ data: [] }),
     finance ? db.from("payments").select("amount, status, mode, method, paid_at").eq("status", "verified").gte("paid_at", `${monthStart}T00:00:00`) : Promise.resolve({ data: [] }),
     finance ? db.from("invoice_balances").select("outstanding").gt("outstanding", 0) : Promise.resolve({ data: [] }),
-    db.from("office_files").select("id, reference_no, subject, due_date").not("status", "in", "(completed,archived)").not("due_date", "is", null).lte("due_date", new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10)).order("due_date").limit(5),
+    db.from("office_files").select("id, reference_no, subject, due_date").not("status", "in", "(completed,archived)").not("due_date", "is", null).lte("due_date", daysFromNow(7)).order("due_date").limit(5),
   ]);
   const fileList = (files.data ?? []) as { status: string }[];
   const fc = (s: string[]) => fileList.filter((f) => s.includes(f.status)).length;

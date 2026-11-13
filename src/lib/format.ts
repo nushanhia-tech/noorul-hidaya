@@ -54,6 +54,15 @@ export function slugify(s: string) {
   return s.toLowerCase().normalize("NFKD").replace(/[^a-z0-9\s-]/g, "").trim().replace(/[\s-]+/g, "-").slice(0, 80);
 }
 
+/** ISO date (YYYY-MM-DD) n days from now. */
+export function daysFromNow(n: number) {
+  return new Date(nowMs() + n * 86400000).toISOString().slice(0, 10);
+}
+/** Current time in ms (wrapper keeps render code free of direct impure calls). */
+export function nowMs() {
+  return new Date().getTime();
+}
+
 export function greeting(d = new Date()) {
   const h = Number(new Intl.DateTimeFormat("en-GB", { hour: "numeric", hour12: false, timeZone: TZ }).format(d));
   return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";

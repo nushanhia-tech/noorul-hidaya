@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useActionState, useEffect, useRef } from "react";
+import { createContext, use, useActionState, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -28,29 +28,29 @@ export function ActionForm({
   const [state, formAction] = useActionState<ActionResult, FormData>(action, { ok: true });
   const ref = useRef<HTMLFormElement>(null);
   const router = useRouter();
-  const submitted = useRef(false);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    if (!submitted.current) return;
+    if (!submitted) return;
     if (state.ok) {
       if (resetOnSuccess) ref.current?.reset();
       const to = state.redirectTo ?? onSuccessHref;
       if (to) router.push(to);
     }
-  }, [state, resetOnSuccess, onSuccessHref, router]);
+  }, [state, submitted, resetOnSuccess, onSuccessHref, router]);
 
   return (
     <form
       ref={ref}
       action={(fd) => {
-        submitted.current = true;
+        setSubmitted(true);
         return formAction(fd);
       }}
       className={className}
       noValidate={false}
     >
       {!state.ok && <Notice tone="danger" className="mb-4">{state.error}</Notice>}
-      {state.ok && submitted.current && (state.message || successMessage) && !state.redirectTo && (
+      {state.ok && submitted && (state.message || successMessage) && !state.redirectTo && (
         <Notice tone="success" className="mb-4">{state.message ?? successMessage}</Notice>
       )}
       <FieldErrorsContext value={!state.ok ? state.fieldErrors ?? {} : {}}>

@@ -42,7 +42,7 @@ export function Hero({ settings, slides }: { settings: SiteSettings; slides: Her
               >
                 <Icon className="h-5 w-5 shrink-0" strokeWidth={1.75} />
                 <span className="flex-1">{label}</span>
-                {primary && <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />}
+                {primary && <ArrowUpRight className="hidden h-4 w-4 shrink-0 sm:block transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />}
               </Link>
             ))}
           </nav>
