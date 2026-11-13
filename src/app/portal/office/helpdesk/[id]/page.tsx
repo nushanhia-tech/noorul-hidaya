@@ -29,7 +29,7 @@ export default async function OfficeTicket({ params }: { params: Promise<{ id: s
   const supervisorIds = new Set((supRoles ?? []).map((r) => r.user_id));
   const supervisors = staff.filter((s) => supervisorIds.has(s.value));
   const req = t.requester as { full_name: string; email: string };
-  const st = t.students as { id: string; register_no: string; programmes: { code: string } } | null;
+  const st = t.students as { id: string; register_no: string; programmes: { code: string } | null } | null;
   const respH = t.first_response_at ? (new Date(t.first_response_at).getTime() - new Date(t.created_at).getTime()) / 3600000 : null;
   return (
     <>
@@ -49,7 +49,7 @@ export default async function OfficeTicket({ params }: { params: Promise<{ id: s
           <Card>
             <CardBody>
               <KeyValue columns={1} items={[
-                { label: "Student", value: <>{req.full_name}{st && <> · <Link className="text-royal hover:underline" href={`/portal/office/students/${st.id}`}>{st.register_no}</Link> ({st.programmes.code})</>}</> },
+                { label: "Student", value: <>{req.full_name}{st && <> · <Link className="text-royal hover:underline" href={`/portal/office/students/${st.id}`}>{st.register_no}</Link> {st.programmes && ` (${st.programmes.code})`}</>}</> },
                 { label: "Email", value: req.email },
                 { label: "Assigned to", value: (t.assignee as { full_name: string } | null)?.full_name ?? "Unassigned" },
                 { label: "Escalated to", value: (t.escalatee as { full_name: string } | null)?.full_name ? `${(t.escalatee as { full_name: string }).full_name} · ${formatDateTime(t.escalated_at)}` : "—" },

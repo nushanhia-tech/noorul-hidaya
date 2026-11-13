@@ -14,26 +14,43 @@ import { toActionError, must, type ActionResult } from "@/lib/actions";
 const opt = (s: z.ZodString) => s.optional().or(z.literal("")).transform((v) => v || null);
 const uuidOpt = z.string().uuid().optional().or(z.literal("")).transform((v) => v || null);
 
+const autoNo = (prefix: string) => `${prefix}-${new Date().getFullYear()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+const optInt = (min: number, max: number, fallback: number) =>
+  z.union([z.literal(""), z.coerce.number().int().min(min).max(max)]).optional().transform((v) => (v === "" || v === undefined ? fallback : v));
+
+/** Every academic field is optional; blank ID numbers are generated automatically. */
 const studentFields = z.object({
-  register_no: z.string().trim().min(2, "Register number is required").max(40),
+  register_no: z.string().trim().max(40).optional().transform((v) => v || autoNo("STU")),
   admission_no: opt(z.string().trim().max(40)),
-  programme_id: z.string().uuid("Choose a programme"),
+  programme_id: uuidOpt,
   batch_id: uuidOpt,
-  current_semester: z.coerce.number().int().min(1).max(12),
+  current_semester: optInt(1, 12, 1),
   date_of_birth: opt(z.string()),
   gender: z.enum(["female", "male", "other", "undisclosed"]).optional().or(z.literal("")).transform((v) => v || null),
   guardian_name: opt(z.string().trim().max(120)),
   admitted_on: opt(z.string()),
-  status: z.enum(["active", "graduated", "withdrawn", "suspended"]).default("active"),
+  status: z.enum(["active", "graduated", "withdrawn", "suspended"]).optional().or(z.literal("")).transform((v) => v || "active"),
 });
 const facultyFields = z.object({
-  employee_no: z.string().trim().min(2, "Employee number is required").max(40),
-  department_id: z.string().uuid("Choose a department"),
-  designation: z.string().trim().min(2, "Designation is required").max(120),
+  employee_no: z.string().trim().max(40).optional().transform((v) => v || autoNo("EMP")),
+  department_id: uuidOpt,
+  designation: z.string().trim().max(120).optional().transform((v) => v || "Faculty"),
   joined_on: opt(z.string()),
   is_hod: z.string().optional().transform((v) => v === "on"),
   is_public: z.string().optional().transform((v) => v === "on"),
 });
+
+/** Make sure a user with the student/faculty role has a matching record, so they show everywhere. */
+async function ensureRecords(db: Awaited<ReturnType<typeof createClient>>, userId: string, roles: Role[]) {
+  if (roles.includes("student")) {
+    const { data } = await db.from("students").select("id").eq("profile_id", userId).maybeSingle();
+    if (!data) must(await db.from("students").insert({ profile_id: userId, register_no: autoNo("STU") }));
+  }
+  if (roles.includes("faculty")) {
+    const { data } = await db.from("faculty").select("id").eq("profile_id", userId).maybeSingle();
+    if (!data) must(await db.from("faculty").insert({ profile_id: userId, employee_no: autoNo("EMP"), is_public: true }));
+  }
+}
 
 function rolesFrom(fd: FormData): Role[] {
   return fd.getAll("roles").map(String).filter((r): r is Role => (ROLES as readonly string[]).includes(r));
@@ -50,7 +67,6 @@ export async function createUser(_: ActionResult, fd: FormData): Promise<ActionR
       method: z.enum(["invite", "password"]),
     }).parse(Object.fromEntries(fd));
     const roles = rolesFrom(fd);
-    if (!roles.length) return { ok: false, error: "Choose at least one role.", fieldErrors: { roles: "Required" } };
     if (roles.some((r) => r === "admin") && !me.permissions.has("roles.manage")) return { ok: false, error: "Only role managers can create administrators." };
     const raw = Object.fromEntries(fd);
     const student = roles.includes("student") ? studentFields.parse(raw) : null;
@@ -72,7 +88,7 @@ export async function createUser(_: ActionResult, fd: FormData): Promise<ActionR
 
     const db = await createClient();
     must(await db.from("profiles").update({ full_name: base.full_name, phone: base.phone || null }).eq("id", createdId));
-    must(await db.from("user_roles").insert(roles.map((role) => ({ user_id: createdId, role, granted_by: me.id }))));
+    if (roles.length) must(await db.from("user_roles").insert(roles.map((role) => ({ user_id: createdId, role, granted_by: me.id }))));
     if (student) must(await db.from("students").insert({ ...student, profile_id: createdId }));
     if (faculty) must(await db.from("faculty").insert({ ...faculty, profile_id: createdId }));
     const sections = fd.getAll("sections").map(String).filter(Boolean);
@@ -124,6 +140,7 @@ export async function setRoles(userId: string, _: ActionResult, fd: FormData): P
     const sections = fd.getAll("sections").map(String).filter(Boolean);
     must(await db.from("staff_sections").delete().eq("user_id", userId));
     if (sections.length) must(await db.from("staff_sections").insert(sections.map((section_id) => ({ user_id: userId, section_id }))));
+    await ensureRecords(db, userId, [...wanted]);
     if (add.length || remove.length) await logSecurityEvent("roles_changed", me.id, { target: userId, add, remove });
     revalidatePath(`/portal/admin/users/${userId}`);
     return { ok: true, message: "Roles updated." };

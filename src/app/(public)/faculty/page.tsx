@@ -24,7 +24,7 @@ export default async function FacultyDirectoryPage({ searchParams }: { searchPar
             {[...grouped.entries()].map(([dept, members]) => (
               <section key={dept}>
                 <h2 className="mb-4 flex items-baseline justify-between border-b border-line pb-3 font-display text-xl font-semibold">
-                  <Link href={`/departments/${members[0].department_slug}`} className="hover:underline">{dept}</Link>
+                  {members[0].department_slug ? <Link href={`/departments/${members[0].department_slug}`} className="hover:underline">{dept}</Link> : dept}
                   <span className="text-sm font-normal text-muted">{members.length}</span>
                 </h2>
                 <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

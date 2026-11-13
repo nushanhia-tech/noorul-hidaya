@@ -26,7 +26,7 @@ export default async function LedgersPage({ searchParams }: { searchParams: Prom
   const ids = (students ?? []).map((s) => s.id);
   const { data: bal } = ids.length ? await db.from("student_fee_balances").select("*").in("student_id", ids) : { data: [] };
   const b = new Map((bal ?? []).map((x) => [x.student_id, x]));
-  const rows = ((students ?? []) as unknown as { id: string; register_no: string; profiles: { full_name: string }; programmes: { code: string } }[]).map((s) => ({ ...s, bal: b.get(s.id) }));
+  const rows = ((students ?? []) as unknown as { id: string; register_no: string; profiles: { full_name: string }; programmes: { code: string } | null }[]).map((s) => ({ ...s, bal: b.get(s.id) }));
   return (
     <>
       <PageHeader title="Student ledgers" description="Search a student to open their full fee ledger." />
@@ -36,7 +36,7 @@ export default async function LedgersPage({ searchParams }: { searchParams: Prom
           columns={[
             { key: "n", header: "Student", primary: true, cell: (r) => r.profiles.full_name },
             { key: "r", header: "Register no.", cell: (r) => <span className="tabular">{r.register_no}</span> },
-            { key: "p", header: "Programme", cell: (r) => r.programmes.code },
+            { key: "p", header: "Programme", cell: (r) => r.programmes?.code ?? "—" },
             { key: "a", header: "Assigned", align: "right", cell: (r) => formatMoney(r.bal?.total_assigned ?? 0) },
             { key: "pd", header: "Paid", align: "right", cell: (r) => formatMoney(r.bal?.total_paid ?? 0) },
             { key: "o", header: "Outstanding", align: "right", cell: (r) => <span className={Number(r.bal?.outstanding) > 0 ? "font-medium text-accent-700" : ""}>{formatMoney(r.bal?.outstanding ?? 0)}</span> },

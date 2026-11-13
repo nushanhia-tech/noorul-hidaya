@@ -22,7 +22,7 @@ export default async function StudentRecord({ params }: { params: Promise<{ id: 
     can(user, "helpdesk.handle") ? db.from("tickets").select("id, ticket_no, subject, status").eq("student_id", id).order("created_at", { ascending: false }).limit(10) : Promise.resolve({ data: [] }),
   ]);
   const p = s.profiles as { full_name: string; email: string; phone: string | null };
-  const prog = s.programmes as { name: string; departments: { name: string } };
+  const prog = s.programmes as { name: string; departments: { name: string } | null } | null;
   return (
     <>
       <PageHeader eyebrow={s.register_no} title={p.full_name} back={{ href: "/portal/office/students", label: "Student search" }}
@@ -32,7 +32,7 @@ export default async function StudentRecord({ params }: { params: Promise<{ id: 
         </>} />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
         <Card><CardBody><KeyValue items={[
-          { label: "Programme", value: prog.name }, { label: "Department", value: prog.departments.name },
+          { label: "Programme", value: prog?.name }, { label: "Department", value: prog?.departments?.name },
           { label: "Batch", value: (s.batches as { name: string } | null)?.name }, { label: "Semester", value: s.current_semester },
           { label: "Status", value: <StatusBadge status={s.status} /> }, { label: "Admission no.", value: s.admission_no },
           { label: "Email", value: p.email }, { label: "Phone", value: p.phone },

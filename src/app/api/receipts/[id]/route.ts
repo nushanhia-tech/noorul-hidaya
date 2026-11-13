@@ -19,14 +19,14 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   const receipt = (Array.isArray(p.receipts) ? p.receipts[0] : p.receipts) as { receipt_no: string; issued_at: string } | null;
   if (p.status !== "verified" || !receipt) return new NextResponse("No receipt has been issued for this payment", { status: 409 });
   const inv = p.invoices as unknown as { invoice_no: string; title: string };
-  const st = p.students as unknown as { register_no: string; profiles: { full_name: string }; programmes: { name: string } };
+  const st = p.students as unknown as { register_no: string; profiles: { full_name: string }; programmes: { name: string } | null };
   const sandbox = p.mode === "sandbox";
 
   const pdf = await PdfBuilder.create(await getLetterhead(), { watermark: sandbox ? "SANDBOX - NOT A VALID RECEIPT" : undefined });
   pdf.title(sandbox ? "Test receipt (sandbox)" : "Fee receipt", `Receipt ${receipt.receipt_no}  |  Issued ${formatDateTime(receipt.issued_at)}`);
   pdf.keyValues([
     ["Student", st.profiles.full_name], ["Register number", st.register_no],
-    ["Programme", st.programmes.name], ["Invoice", inv.invoice_no],
+    ["Programme", st.programmes?.name ?? "-"], ["Invoice", inv.invoice_no],
   ]);
   pdf.table(["Description", "Method", "Reference", "Amount"], [[
     inv.title, PAYMENT_METHODS[p.method as keyof typeof PAYMENT_METHODS] ?? p.method,

@@ -33,6 +33,6 @@ export async function staffOptions(roles: string[] = ["office_clerk", "office_su
 export async function facultyOptions() {
   const db = await createClient();
   const { data } = await db.from("faculty").select("id, employee_no, profiles(full_name), departments(code)").order("employee_no");
-  return (data ?? []).map((f) => ({ value: f.id, label: `${(f.profiles as unknown as { full_name: string }).full_name} (${(f.departments as unknown as { code: string }).code})` }))
+  return (data ?? []).map((f) => ({ value: f.id, label: `${(f.profiles as unknown as { full_name: string }).full_name} (${(f.departments as unknown as { code: string } | null)?.code ?? "—"})` }))
     .sort((a, b) => a.label.localeCompare(b.label));
 }
