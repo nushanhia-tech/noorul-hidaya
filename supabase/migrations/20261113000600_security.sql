@@ -347,7 +347,10 @@ create policy payment_corrections_insert on public.payment_corrections for inser
   public.has_permission('finance.correct') and corrected_by = auth.uid());
 
 -- Office ------------------------------------------------------------------------
-create policy office_files_select on public.office_files for select to authenticated using (public.can_access_office_file(id));
+create policy office_files_select on public.office_files for select to authenticated using (
+  public.has_permission('files.view_all') or (public.has_permission('files.manage') and (
+    created_by = auth.uid() or assigned_to = auth.uid()
+    or section_id in (select ss.section_id from public.staff_sections ss where ss.user_id = auth.uid()))));
 create policy office_files_insert on public.office_files for insert to authenticated with check (public.has_permission('files.manage'));
 create policy office_files_update on public.office_files for update to authenticated
   using (public.can_access_office_file(id)) with check (public.has_permission('files.manage') or public.has_permission('files.view_all'));
@@ -363,7 +366,8 @@ create policy documents_insert on public.documents for insert to authenticated w
 create policy documents_delete on public.documents for delete to authenticated using (
   uploaded_by = auth.uid() and public.can_access_entity(entity_type, entity_id));
 
-create policy office_tasks_select on public.office_tasks for select to authenticated using (public.can_access_task(id));
+create policy office_tasks_select on public.office_tasks for select to authenticated using (
+  public.is_office_staff() and (assigned_to = auth.uid() or created_by = auth.uid() or public.has_permission('tasks.view_all')));
 create policy office_tasks_insert on public.office_tasks for insert to authenticated with check (
   public.is_office_staff() and (assigned_to = auth.uid() or assigned_to is null or public.has_permission('tasks.assign')));
 create policy office_tasks_update on public.office_tasks for update to authenticated
@@ -382,7 +386,9 @@ create policy letters_insert on public.letters for insert to authenticated with 
 create policy letters_update on public.letters for update to authenticated
   using (public.has_permission('letters.manage')) with check (public.has_permission('letters.manage'));
 
-create policy tickets_select on public.tickets for select to authenticated using (public.can_access_ticket(id));
+create policy tickets_select on public.tickets for select to authenticated using (
+  requester_id = auth.uid() or public.has_permission('helpdesk.view_all')
+  or (public.has_permission('helpdesk.handle') and (assigned_to = auth.uid() or escalated_to = auth.uid() or assigned_to is null)));
 create policy tickets_insert on public.tickets for insert to authenticated with check (
   public.has_role('student') and requester_id = auth.uid());
 create policy tickets_update on public.tickets for update to authenticated
@@ -397,7 +403,8 @@ create policy ticket_messages_insert on public.ticket_messages for insert to aut
   and (public.has_permission('helpdesk.handle') or exists (select 1 from public.tickets t where t.id = ticket_id and t.status <> 'closed')));
 create policy ticket_events_select on public.ticket_events for select to authenticated using (public.can_access_ticket(ticket_id));
 
-create policy parent_threads_select on public.parent_threads for select to authenticated using (public.can_access_parent_thread(id));
+create policy parent_threads_select on public.parent_threads for select to authenticated using (
+  (parent_id = auth.uid() and public.parent_can_view_student(student_id)) or public.has_permission('parents.respond'));
 create policy parent_threads_insert on public.parent_threads for insert to authenticated with check (
   parent_id = auth.uid() and public.parent_can_view_student(student_id));
 create policy parent_threads_update on public.parent_threads for update to authenticated

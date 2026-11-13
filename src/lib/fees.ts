@@ -43,7 +43,7 @@ export function invoiceBalance(
 /** Validate a counter payment before sending it to the database. */
 export function validatePaymentAmount(amount: number, outstanding: number): string | null {
   if (!Number.isFinite(amount) || amount <= 0) return "Enter an amount greater than zero.";
-  if (toPaise(amount) !== Math.round(amount * 100)) return "Amounts can have at most two decimal places.";
+  if (Math.abs(amount * 100 - Math.round(amount * 100)) > 1e-6) return "Amounts can have at most two decimal places.";
   if (toPaise(amount) > toPaise(outstanding)) return `Amount exceeds the outstanding balance of ${formatMoney(outstanding)}.`;
   return null;
 }

@@ -376,7 +376,11 @@ begin
   select * into e from public.exams where id = p_exam for update;
   if e.id is null then raise exception 'Exam not found'; end if;
   if e.status = 'published' then raise exception 'Results already published'; end if;
-  select count(*) into v_pending from public.mark_sheets where exam_id = p_exam and status <> 'submitted';
+  -- Every course offered in the exam's term that has students must have a submitted sheet.
+  select count(*) into v_pending from public.course_offerings o
+    where o.term_id = e.term_id
+      and exists (select 1 from public.enrolments en where en.offering_id = o.id)
+      and not exists (select 1 from public.mark_sheets ms where ms.exam_id = p_exam and ms.offering_id = o.id and ms.status = 'submitted');
   if v_pending > 0 then raise exception '% mark sheet(s) are not yet submitted', v_pending; end if;
   if not exists (select 1 from public.mark_sheets where exam_id = p_exam) then raise exception 'No mark sheets to publish'; end if;
 
