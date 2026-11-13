@@ -77,6 +77,7 @@ export const PORTAL_NAV: Record<Portal, NavGroup[]> = {
       links: [
         { label: "Reports", href: "/portal/admin/reports", icon: "chart", permission: "reports.admin" },
         { label: "Settings", href: "/portal/admin/settings", icon: "settings", permission: "settings.manage" },
+        { label: "Full Site Reset", href: "/portal/admin/settings/reset", icon: "shield", permission: ["users.manage"] },
       ],
     },
   ],
