@@ -1,3 +1,4 @@
+import { FileDown } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { requirePortal } from "@/lib/auth/session";
 import { lookups, facultyOptions } from "@/lib/data/lookups";
@@ -24,6 +25,13 @@ export default async function OfferingsPage({ searchParams }: { searchParams: Pr
   return (
     <>
       <PageHeader title="Course offerings & timetable" description="Which course is taught to which batch in a term, by whom, and when." />
+      <div className="mb-6 flex flex-wrap items-center gap-2 rounded-md border border-line bg-paper p-3">
+        <span className="mr-1 text-sm font-medium">Download PDF:</span>
+        {[["class", sp.batch ? "Class-wise (selected batch)" : "Class-wise"], ["faculty", "Faculty-wise"], ["all", "All classes, subjects & teachers"]].map(([t, label]) => (
+          <a key={t} href={`/api/reports/timetable?type=${t}${term ? `&term=${term}` : ""}${t === "class" && sp.batch ? `&batch=${sp.batch}` : ""}`}
+            className="inline-flex h-9 items-center gap-1.5 rounded-sm border border-line-strong bg-white px-3 text-sm hover:bg-ivory"><FileDown className="h-4 w-4" /> {label}</a>
+        ))}
+      </div>
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
         <div>
           <FilterBar className="mb-4" placeholder="—" q={undefined}>
