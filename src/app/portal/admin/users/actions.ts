@@ -39,6 +39,16 @@ const facultyFields = z.object({
   is_public: z.string().optional().transform((v) => v === "on"),
 });
 
+/** Enrol a student in every course offering of their batch, so they appear in class lists and mark sheets. */
+async function enrolInBatchOfferings(db: Awaited<ReturnType<typeof createClient>>, userId: string) {
+  const { data: st } = await db.from("students").select("id, batch_id, status").eq("profile_id", userId).maybeSingle();
+  if (!st?.batch_id || st.status !== "active") return 0;
+  const { data: offs } = await db.from("course_offerings").select("id").eq("batch_id", st.batch_id);
+  if (!offs?.length) return 0;
+  must(await db.from("enrolments").upsert(offs.map((o) => ({ offering_id: o.id, student_id: st.id })), { onConflict: "offering_id,student_id", ignoreDuplicates: true }));
+  return offs.length;
+}
+
 /** Make sure a user with the student/faculty role has a matching record, so they show everywhere. */
 async function ensureRecords(db: Awaited<ReturnType<typeof createClient>>, userId: string, roles: Role[]) {
   if (roles.includes("student")) {
@@ -81,6 +91,7 @@ export async function createUser(_: ActionResult, fd: FormData): Promise<ActionR
     must(await db.from("profiles").update({ full_name: base.full_name, phone: base.phone || null }).eq("id", createdId));
     if (roles.length) must(await db.from("user_roles").insert(roles.map((role) => ({ user_id: createdId, role, granted_by: me.id }))));
     if (student) must(await db.from("students").insert({ ...student, profile_id: createdId }));
+    if (student) await enrolInBatchOfferings(db, createdId);
     if (faculty) must(await db.from("faculty").insert({ ...faculty, profile_id: createdId }));
     const sections = fd.getAll("sections").map(String).filter(Boolean);
     if (sections.length) must(await db.from("staff_sections").insert(sections.map((section_id) => ({ user_id: createdId, section_id }))));
@@ -144,8 +155,9 @@ export async function saveStudentRecord(userId: string, _: ActionResult, fd: For
     const data = studentFields.parse(Object.fromEntries(fd));
     const db = await createClient();
     must(await db.from("students").upsert({ ...data, profile_id: userId }, { onConflict: "profile_id" }));
+    const n = await enrolInBatchOfferings(db, userId);
     revalidatePath(`/portal/admin/users/${userId}`);
-    return { ok: true, message: "Student record saved." };
+    return { ok: true, message: data.batch_id ? `Student record saved. Enrolled in ${n} course(s) of the batch.` : "Student record saved. Choose a batch to enrol the student in its courses." };
   } catch (e) { return toActionError(e); }
 }
 

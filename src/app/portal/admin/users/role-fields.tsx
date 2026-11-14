@@ -29,7 +29,7 @@ export function StudentFields({ lk, d }: { lk: Lookups; d?: Record<string, unkno
           <option value="">Not set</option>{lk.programmes.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
         </Select>
       </F>
-      <F name="batch_id" label="Batch">
+      <F name="batch_id" label="Batch" hint="Needed for timetable, class lists and marks entry">
         <Select id="batch_id" name="batch_id" defaultValue={(d?.batch_id as string) ?? ""}>
           <option value="">None</option>{lk.batches.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
         </Select>
