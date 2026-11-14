@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getSessionUser, can } from "@/lib/auth/session";
 import { PdfBuilder, pdfResponse } from "@/lib/pdf/document";
 import { getLetterhead } from "@/lib/pdf/letterhead";
+import { timetableGridPdf, type GridPage } from "@/lib/pdf/timetable-grid";
 import { DAY_NAMES, formatDateTime, formatTime } from "@/lib/format";
 
 type Offering = {
@@ -25,7 +26,7 @@ export async function GET(request: NextRequest) {
   if (!can(user, "academics.manage")) return new NextResponse("Forbidden", { status: 403 });
   const sp = request.nextUrl.searchParams;
   const type = sp.get("type") ?? "all";
-  if (!["class", "faculty", "all"].includes(type)) return new NextResponse("Unknown type", { status: 400 });
+  if (!["class", "faculty", "all", "grid-class", "grid-faculty"].includes(type)) return new NextResponse("Unknown type", { status: 400 });
 
   const db = await createClient();
   const termId = sp.get("term");
@@ -48,6 +49,22 @@ export async function GET(request: NextRequest) {
     list.flatMap((o) => o.timetable_slots.map((s) => ({ s, o })))
       .sort((a, b) => a.s.day_of_week - b.s.day_of_week || a.s.starts_at.localeCompare(b.s.starts_at))
       .map(({ s, o }) => [DAY_NAMES[s.day_of_week], `${formatTime(s.starts_at)} - ${formatTime(s.ends_at)}`, ...cols(o), s.room || "-"]);
+
+  // Landscape print grids: one page per class or per teacher.
+  if (type === "grid-class" || type === "grid-faculty") {
+    const pages: GridPage[] = [];
+    if (type === "grid-class") {
+      const batches = [...new Map(offerings.map((o) => [o.batches.id, o.batches.name])).entries()].sort((a, b) => a[1].localeCompare(b[1]));
+      for (const [id, name] of batches) pages.push({ title: name, subtitle: term.name, slots: offerings.filter((o) => o.batches.id === id).flatMap((o) => o.timetable_slots.map((t) => ({ day: t.day_of_week, start: t.starts_at, end: t.ends_at, line1: o.courses.title, line2: teachers(o), room: t.room }))) });
+    } else {
+      const people = new Map<string, string>();
+      for (const o of offerings) for (const f of o.offering_faculty) people.set(f.faculty.id, f.faculty.profiles.full_name);
+      for (const [id, name] of [...people.entries()].filter(([i]) => !facultyFilter || i === facultyFilter).sort((a, b) => a[1].localeCompare(b[1]))) {
+        pages.push({ title: name, subtitle: term.name, slots: offerings.filter((o) => o.offering_faculty.some((f) => f.faculty.id === id)).flatMap((o) => o.timetable_slots.map((t) => ({ day: t.day_of_week, start: t.starts_at, end: t.ends_at, line1: o.courses.title, line2: o.batches.name, room: t.room }))) });
+      }
+    }
+    return pdfResponse(await timetableGridPdf(await getLetterhead(), pages), `timetable-${type}-${term.name.replace(/\s+/g, "-")}.pdf`, true);
+  }
 
   const pdf = await PdfBuilder.create(await getLetterhead());
   const stamp = `${term.name}  |  Generated ${formatDateTime(new Date())}`;

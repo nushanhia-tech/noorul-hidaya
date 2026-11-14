@@ -159,6 +159,38 @@ export async function addSlot(offeringId: string, _: ActionResult, fd: FormData)
   } catch (e) { return toActionError(e); }
 }
 
+/** Add a period from the Timetable Schedule page. Rejects clashes for the same class or the same teacher. */
+export async function addScheduleSlot(_: ActionResult, fd: FormData): Promise<ActionResult> {
+  try {
+    await assertPermission("academics.manage");
+    const d = z.object({ offering_id: z.string().uuid("Choose a subject"), day_of_week: int(1, 7), starts_at: z.string().regex(/^\d{2}:\d{2}$/), ends_at: z.string().regex(/^\d{2}:\d{2}$/), room: s(60) })
+      .refine((v) => v.ends_at > v.starts_at, { message: "End must be after start", path: ["ends_at"] }).parse(Object.fromEntries(fd));
+    const db = await createClient();
+    const { data: off } = await db.from("course_offerings").select("id, term_id, batch_id, offering_faculty(faculty_id)").eq("id", d.offering_id).single();
+    if (!off) return { ok: false, error: "Subject not found." };
+    const teacherIds = (off.offering_faculty as { faculty_id: string }[]).map((f) => f.faculty_id);
+    const { data: same } = await db.from("timetable_slots")
+      .select("starts_at, ends_at, course_offerings!inner(batch_id, term_id, courses(title), batches(name), offering_faculty(faculty_id))")
+      .eq("day_of_week", d.day_of_week).eq("course_offerings.term_id", off.term_id);
+    for (const row of (same ?? []) as unknown as { starts_at: string; ends_at: string; course_offerings: { batch_id: string; courses: { title: string }; batches: { name: string }; offering_faculty: { faculty_id: string }[] } }[]) {
+      const overlap = row.starts_at.slice(0, 5) < d.ends_at && d.starts_at < row.ends_at.slice(0, 5);
+      if (!overlap) continue;
+      if (row.course_offerings.batch_id === off.batch_id) return { ok: false, error: `Clash: this class already has ${row.course_offerings.courses.title} at that time.` };
+      if (row.course_offerings.offering_faculty.some((f) => teacherIds.includes(f.faculty_id))) return { ok: false, error: `Clash: the teacher is already teaching ${row.course_offerings.batches.name} at that time.` };
+    }
+    must(await db.from("timetable_slots").insert(d));
+    revalidatePath("/portal/admin/timetable");
+    return { ok: true, message: "Period added." };
+  } catch (e) { return toActionError(e); }
+}
+
+export async function removeScheduleSlot(slotId: string) {
+  await assertPermission("academics.manage");
+  const db = await createClient();
+  await db.from("timetable_slots").delete().eq("id", slotId);
+  revalidatePath("/portal/admin/timetable");
+}
+
 export async function removeSlot(offeringId: string, slotId: string) {
   await assertPermission("academics.manage");
   const db = await createClient();

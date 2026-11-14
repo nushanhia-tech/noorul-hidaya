@@ -61,6 +61,7 @@ export const PORTAL_NAV: Record<Portal, NavGroup[]> = {
         { label: "Programmes & Courses", href: "/portal/admin/programmes", icon: "graduation", permission: "academics.manage", mobile: true },
         { label: "Academic Setup", href: "/portal/admin/academic", icon: "calendar", permission: "academics.manage" },
         { label: "Offerings & Timetable", href: "/portal/admin/offerings", icon: "clock", permission: "academics.manage" },
+        { label: "Timetable Schedule", href: "/portal/admin/timetable", icon: "calendar", permission: "academics.manage" },
         { label: "Examinations", href: "/portal/admin/exams", icon: "clipboard", permission: ["academics.manage", "results.publish"] },
       ],
     },
