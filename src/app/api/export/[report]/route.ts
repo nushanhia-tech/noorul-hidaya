@@ -105,7 +105,7 @@ const REPORTS: Record<string, Report> = {
   users: {
     permission: "users.manage",
     run: async ({ db }) => {
-      const { data } = await db.from("profiles").select("full_name, email, phone, is_active, created_at, user_roles(role)").order("full_name");
+      const { data } = await db.from("profiles").select("full_name, email, phone, is_active, created_at, user_roles!user_roles_user_id_fkey(role)").order("full_name");
       const rows = (data ?? []).map((p) => [p.full_name, p.email, p.phone, (p.user_roles as { role: string }[]).map((r) => r.role).join(" "), p.is_active ? "active" : "inactive", p.created_at]);
       return { name: "users", headers: ["Name", "Email", "Phone", "Roles", "Status", "Created"], rows };
     },

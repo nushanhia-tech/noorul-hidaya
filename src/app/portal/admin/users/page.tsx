@@ -1,7 +1,7 @@
 import { Download, UserPlus, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { requirePortal } from "@/lib/auth/session";
-import { PageHeader, EmptyState, Pagination, Tabs } from "@/components/ui/misc";
+import { PageHeader, EmptyState, Notice, Pagination, Tabs } from "@/components/ui/misc";
 import { Card } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/table";
 import { Badge, StatusBadge } from "@/components/ui/badge";
@@ -18,11 +18,11 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page) || 1);
   const db = await createClient();
-  let q = db.from("profiles").select(`id, full_name, email, is_active, created_at, user_roles${sp.role ? "!inner" : ""}(role)`, { count: "exact" }).order("full_name");
+  let q = db.from("profiles").select(`id, full_name, email, is_active, created_at, user_roles!user_roles_user_id_fkey${sp.role ? "!inner" : ""}(role)`, { count: "exact" }).order("full_name");
   if (sp.role) q = q.eq("user_roles.role", sp.role);
   if (sp.status) q = q.eq("is_active", sp.status === "active");
   if (sp.q) { const t = sp.q.replace(/[%_,()]/g, ""); q = q.or(`full_name.ilike.%${t}%,email.ilike.%${t}%`); }
-  const { data, count } = await q.range((page - 1) * PAGE, page * PAGE - 1);
+  const { data, count, error } = await q.range((page - 1) * PAGE, page * PAGE - 1);
   const rows = (data ?? []) as unknown as { id: string; full_name: string; email: string; is_active: boolean; created_at: string; user_roles: { role: Role }[] }[];
   const qs = (p: number) => `/portal/admin/users?${new URLSearchParams({ ...(sp.q ? { q: sp.q } : {}), ...(sp.role ? { role: sp.role } : {}), ...(sp.status ? { status: sp.status } : {}), page: String(p) })}`;
   return (
@@ -42,6 +42,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
         <FilterSelect name="role" value={sp.role} label="Role" options={ROLES.map((r) => ({ value: r, label: ROLE_LABELS[r] }))} />
         <FilterSelect name="status" value={sp.status} label="Status" options={[{ value: "active", label: "Active" }, { value: "inactive", label: "Deactivated" }]} />
       </FilterBar>
+      {error && <Notice tone="danger" className="mb-4" title="Could not load users">{error.message}</Notice>}
       <Card>
         <DataTable rows={rows} rowKey={(r) => r.id} rowHref={(r) => `/portal/admin/users/${r.id}`}
           empty={<EmptyState icon={Users} title="No users match" />}

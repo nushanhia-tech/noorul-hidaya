@@ -26,7 +26,7 @@ export default async function AdminDashboard() {
     count("profiles", "is_active", true),
     count("profiles", "is_active", false),
     db.from("terms").select("name, starts_on, ends_on, academic_years(label)").eq("is_current", true).maybeSingle(),
-    db.from("profiles").select("id, full_name, created_at, user_roles(role)").order("created_at", { ascending: false }).limit(6),
+    db.from("profiles").select("id, full_name, created_at, user_roles!user_roles_user_id_fkey(role)").order("created_at", { ascending: false }).limit(6),
     db.from("notices").select("id, title, status, updated_at").order("updated_at", { ascending: false }).limit(5),
     count("news", "status", "published"),
     count("events", "status", "published"),
