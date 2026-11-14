@@ -8,7 +8,6 @@ import { assertPermission } from "@/lib/auth/session";
 import { ROLES, type Role } from "@/lib/auth/roles";
 import { passwordSchema } from "@/lib/validation/auth";
 import { logSecurityEvent } from "@/lib/security";
-import { publicEnv } from "@/lib/env";
 import { toActionError, must, type ActionResult } from "@/lib/actions";
 
 const opt = (s: z.ZodString) => s.optional().or(z.literal("")).transform((v) => v || null);
@@ -64,7 +63,6 @@ export async function createUser(_: ActionResult, fd: FormData): Promise<ActionR
       full_name: z.string().trim().min(2, "Enter the full name").max(120),
       email: z.string().trim().toLowerCase().email("Enter a valid email"),
       phone: z.string().trim().max(20).regex(/^[0-9+() -]*$/, "Invalid phone").optional(),
-      method: z.enum(["invite", "password"]),
     }).parse(Object.fromEntries(fd));
     const roles = rolesFrom(fd);
     if (roles.some((r) => r === "admin") && !me.permissions.has("roles.manage")) return { ok: false, error: "Only role managers can create administrators." };
@@ -73,18 +71,11 @@ export async function createUser(_: ActionResult, fd: FormData): Promise<ActionR
     const faculty = roles.includes("faculty") ? facultyFields.parse(raw) : null;
 
     const admin = createAdminClient();
-    if (base.method === "invite") {
-      const { data, error } = await admin.auth.admin.inviteUserByEmail(base.email, {
-        data: { full_name: base.full_name }, redirectTo: `${publicEnv.siteUrl}/auth/confirm?next=/reset-password`,
-      });
-      if (error) return { ok: false, error: error.message };
-      createdId = data.user.id;
-    } else {
-      const password = passwordSchema.parse(fd.get("password"));
-      const { data, error } = await admin.auth.admin.createUser({ email: base.email, password, email_confirm: true, user_metadata: { full_name: base.full_name } });
-      if (error) return { ok: false, error: error.message };
-      createdId = data.user.id;
-    }
+    // No emails: the administrator sets the password and the account is confirmed immediately.
+    const password = passwordSchema.parse(fd.get("password"));
+    const { data, error } = await admin.auth.admin.createUser({ email: base.email, password, email_confirm: true, user_metadata: { full_name: base.full_name } });
+    if (error) return { ok: false, error: error.message.includes("already") ? "A user with this email already exists." : error.message };
+    createdId = data.user.id;
 
     const db = await createClient();
     must(await db.from("profiles").update({ full_name: base.full_name, phone: base.phone || null }).eq("id", createdId));
@@ -204,29 +195,14 @@ export async function setLinkStatus(linkId: string, parentId: string, status: "a
   revalidatePath(`/portal/admin/users/${parentId}`);
 }
 
-/** Re-send the invitation email to a user who has not accepted it yet. */
-export async function resendInvite(userId: string, email: string): Promise<ActionResult> {
+/** Administrator sets a new password for a user (no email involved). */
+export async function setUserPassword(userId: string, _: ActionResult, fd: FormData): Promise<ActionResult> {
   try {
     const me = await assertPermission("users.manage");
-    const admin = createAdminClient();
-    const { data: u } = await admin.auth.admin.getUserById(userId);
-    if (u?.user?.last_sign_in_at || u?.user?.email_confirmed_at && u.user.last_sign_in_at) {
-      return { ok: false, error: "This user has already accepted their invitation. Send a password reset link instead." };
-    }
-    const { error } = await admin.auth.admin.inviteUserByEmail(email, { redirectTo: `${publicEnv.siteUrl}/auth/confirm?next=/reset-password` });
+    const password = passwordSchema.parse(fd.get("password"));
+    const { error } = await createAdminClient().auth.admin.updateUserById(userId, { password, email_confirm: true });
     if (error) return { ok: false, error: error.message };
-    await logSecurityEvent("invite_resent", me.id, { target: userId });
-    return { ok: true, message: `A new invitation has been emailed to ${email}. Old links no longer work.` };
-  } catch (e) { return toActionError(e); }
-}
-
-export async function sendReset(email: string): Promise<ActionResult> {
-  try {
-    const me = await assertPermission("users.manage");
-    const db = await createClient();
-    const { error } = await db.auth.resetPasswordForEmail(email, { redirectTo: `${publicEnv.siteUrl}/auth/confirm?next=/reset-password` });
-    if (error) return { ok: false, error: error.message };
-    await logSecurityEvent("password_reset_sent_by_admin", me.id, { email });
-    return { ok: true, message: `A password reset link has been emailed to ${email}.` };
+    await logSecurityEvent("password_set_by_admin", me.id, { target: userId });
+    return { ok: true, message: "Password updated. Give it to the user securely; they can change it in Account settings." };
   } catch (e) { return toActionError(e); }
 }

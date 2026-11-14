@@ -7,10 +7,9 @@ import { Checkbox, Input, Select, Textarea } from "@/components/ui/form";
 import { Card, CardHeader, CardBody } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/badge";
-import { Notice } from "@/components/ui/misc";
 import type { Role } from "@/lib/auth/roles";
 import { humanize } from "@/lib/format";
-import { linkParent, resendInvite, saveFacultyRecord, saveStudentRecord, sendReset, setLinkStatus, setRoles, updateAccount } from "../actions";
+import { linkParent, saveFacultyRecord, saveStudentRecord, setLinkStatus, setRoles, setUserPassword, updateAccount } from "../actions";
 import { FacultyFields, RoleCheckboxes, SectionFields, StudentFields, type Lookups } from "../role-fields";
 
 type Props = {
@@ -23,7 +22,6 @@ type Props = {
 export function UserDetail({ profile, roles, student, faculty, lk, sections, canRoles, isSelf, links }: Props) {
   const [selRoles, setSelRoles] = useState<Role[]>(roles);
   const [pending, start] = useTransition();
-  const [resetMsg, setResetMsg] = useState<{ ok: boolean; text: string } | null>(null);
   return (
     <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       <div className="space-y-6">
@@ -38,17 +36,12 @@ export function UserDetail({ profile, roles, student, faculty, lk, sections, can
             </ActionForm>
           </CardBody>
           <CardBody className="border-t border-line">
-            <p className="text-sm font-medium">Account access</p>
-            <p className="mt-1 text-[13px] text-muted">Administrators never see or set passwords for existing users. Send a secure reset link to the user&rsquo;s registered email instead.</p>
-            {resetMsg && <Notice tone={resetMsg.ok ? "success" : "danger"} className="mt-3">{resetMsg.text}</Notice>}
-            <Button variant="outline" className="mt-3" disabled={pending || !profile.email} onClick={() => start(async () => {
-              const r = await sendReset(profile.email!);
-              setResetMsg(r.ok ? { ok: true, text: r.message ?? "Sent" } : { ok: false, text: r.error });
-            })}>Send password reset link</Button>
-            <Button variant="ghost" className="ml-2 mt-3" disabled={pending || !profile.email} onClick={() => start(async () => {
-              const r = await resendInvite(profile.id, profile.email!);
-              setResetMsg(r.ok ? { ok: true, text: r.message ?? "Sent" } : { ok: false, text: r.error });
-            })}>Resend invitation</Button>
+            <p className="text-sm font-medium">Set a new password</p>
+            <p className="mt-1 text-[13px] text-muted">Use this when a user forgets their password. No email is sent — give the new password to the user directly.</p>
+            <ActionForm action={setUserPassword.bind(null, profile.id)} resetOnSuccess className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-start">
+              <Input name="password" type="text" autoComplete="new-password" aria-label="New password" placeholder="New password" required className="sm:max-w-xs" />
+              <SubmitButton variant="outline">Set password</SubmitButton>
+            </ActionForm>
           </CardBody>
         </Card>
         <Card>

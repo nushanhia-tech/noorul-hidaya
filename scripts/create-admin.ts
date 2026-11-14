@@ -4,9 +4,8 @@
  *   NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... \
  *   npm run create-admin -- --email principal.office@yourcollege.edu --name "Full Name"
  *
- * The user receives an invitation email and chooses their own password, so no
- * password is ever printed, stored or shared. Run once; afterwards create all
- * other accounts from Admin → Users.
+ * No email is sent: pass the password in ADMIN_PASSWORD (never on the command
+ * line). Run once; afterwards create all other accounts from Admin → Users.
  */
 import "dotenv/config";
 import { createClient } from "@supabase/supabase-js";
@@ -26,12 +25,15 @@ async function main() {
   if (!email || !name) throw new Error('Usage: npm run create-admin -- --email you@college.edu --name "Full Name"');
 
   const db = createClient(url, key, { auth: { persistSession: false } });
-  const { data, error } = await db.auth.admin.inviteUserByEmail(email, { data: { full_name: name }, redirectTo: `${site}/auth/confirm?next=/reset-password` });
+  const password = process.env.ADMIN_PASSWORD;
+  if (!password || password.length < 10) throw new Error("Set ADMIN_PASSWORD (at least 10 characters) in the environment.");
+  void site;
+  const { data, error } = await db.auth.admin.createUser({ email, password, email_confirm: true, user_metadata: { full_name: name } });
   if (error) throw new Error(error.message);
   const id = data.user.id;
   const r = await db.from("user_roles").upsert({ user_id: id, role: "admin" }, { onConflict: "user_id,role" });
   if (r.error) throw new Error(r.error.message);
-  console.log(`Invitation sent to ${email}. They become an administrator after accepting it and setting a password.`);
+  console.log(`Administrator ${email} created. Sign in at /login with that email and password.`);
 }
 
 main().catch((e) => { console.error(e.message ?? e); process.exit(1); });
