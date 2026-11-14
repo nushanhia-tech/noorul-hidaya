@@ -19,7 +19,7 @@ export default async function ParentMessages() {
   const names = new Map(students.map((s) => [s.student_id, s.full_name]));
   return (
     <>
-      <PageHeader title="Messages" description="Write to the college office about your ward. Replies come from authorised staff." />
+      <PageHeader title="Messages" description="Write to the school office about your ward. Replies come from authorised staff." />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <Card>
           <DataTable rows={data ?? []} rowKey={(r) => r.id} rowHref={(r) => `/portal/parent/messages/${r.id}`}

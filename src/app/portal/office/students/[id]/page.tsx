@@ -32,8 +32,8 @@ export default async function StudentRecord({ params }: { params: Promise<{ id: 
         </>} />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
         <Card><CardBody><KeyValue items={[
-          { label: "Programme", value: prog?.name }, { label: "Department", value: prog?.departments?.name },
-          { label: "Batch", value: (s.batches as { name: string } | null)?.name }, { label: "Semester", value: s.current_semester },
+          { label: "Class", value: prog?.name }, { label: "Department", value: prog?.departments?.name },
+          { label: "Division", value: (s.batches as { name: string } | null)?.name }, { label: "Term", value: s.current_semester },
           { label: "Status", value: <StatusBadge status={s.status} /> }, { label: "Admission no.", value: s.admission_no },
           { label: "Email", value: p.email }, { label: "Phone", value: p.phone },
           { label: "Guardian", value: s.guardian_name }, { label: "Guardian phone", value: s.guardian_phone },

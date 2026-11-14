@@ -11,7 +11,7 @@ export default async function CampusLifePage() {
   const [events, gallery] = await Promise.all([getEvents("upcoming", 6), getGallery(12)]);
   return (
     <>
-      <PageHero eyebrow="Campus life" title="Beyond the classroom." description="Events, gatherings and everyday moments from the college." />
+      <PageHero eyebrow="Campus life" title="Beyond the classroom." description="Events, gatherings and everyday moments from the school." />
       <Section title="Upcoming events" link={{ href: "/events", label: "All events" }}>
         {events.length ? <div className="grid gap-x-12 md:grid-cols-2">{events.map((e) => <EventRow key={e.id} event={e} />)}</div>
           : <EmptyState title="No upcoming events" description="New events will appear here once published." />}

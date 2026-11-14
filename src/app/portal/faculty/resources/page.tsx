@@ -25,12 +25,12 @@ export default async function ResourcesPage({ searchParams }: { searchParams: Pr
   const options = offerings.map((o) => ({ value: o.id, label: `${offeringLabel(o)} — ${o.batches?.name}${o.terms?.is_current ? "" : ` (${o.terms?.name})`}` }));
   return (
     <>
-      <PageHeader title="Teaching resources" description="Share notes, slides and references with students enrolled in your courses." />
+      <PageHeader title="Teaching resources" description="Share notes, slides and references with students enrolled in your subjects." />
       <Notice tone="info" className="mb-6">This is a resource library, not an assignment system — students can download files but do not submit work here.</Notice>
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
         <div>
           <FilterBar q={q} placeholder="Search resources" className="mb-4">
-            <FilterSelect name="offering" value={offering} label="Course" options={options} />
+            <FilterSelect name="offering" value={offering} label="Subject" options={options} />
           </FilterBar>
           <Card>
             {(data ?? []).length === 0 ? <EmptyState icon={FolderOpen} title="No resources yet" description="Upload your first file using the form." /> : (
@@ -49,7 +49,7 @@ export default async function ResourcesPage({ searchParams }: { searchParams: Pr
         </div>
         <Card className="h-fit">
           <CardHeader title="Upload a resource" description="PDF, DOCX or images · up to 10 MB" />
-          <CardBody>{options.length ? <UploadForm options={options} defaultOffering={offering} /> : <p className="text-sm text-muted">You have no assigned courses.</p>}</CardBody>
+          <CardBody>{options.length ? <UploadForm options={options} defaultOffering={offering} /> : <p className="text-sm text-muted">You have no assigned subjects.</p>}</CardBody>
         </Card>
       </div>
     </>

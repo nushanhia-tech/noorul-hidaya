@@ -24,17 +24,17 @@ export function StudentFields({ lk, d }: { lk: Lookups; d?: Record<string, unkno
     <div className="grid gap-4 sm:grid-cols-2">
       <F name="register_no" label="Register number" hint="Leave blank to generate one"><Input id="register_no" name="register_no" defaultValue={d?.register_no as string} /></F>
       <F name="admission_no" label="Admission number"><Input id="admission_no" name="admission_no" defaultValue={(d?.admission_no as string) ?? ""} /></F>
-      <F name="programme_id" label="Programme">
+      <F name="programme_id" label="Class">
         <Select id="programme_id" name="programme_id" defaultValue={(d?.programme_id as string) ?? ""}>
           <option value="">Not set</option>{lk.programmes.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
         </Select>
       </F>
-      <F name="batch_id" label="Batch" hint="Needed for timetable, class lists and marks entry">
+      <F name="batch_id" label="Division" hint="Needed for timetable, class lists and marks entry">
         <Select id="batch_id" name="batch_id" defaultValue={(d?.batch_id as string) ?? ""}>
           <option value="">None</option>{lk.batches.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
         </Select>
       </F>
-      <F name="current_semester" label="Current semester"><Input id="current_semester" name="current_semester" type="number" min={1} max={12} defaultValue={(d?.current_semester as number) ?? 1} /></F>
+      <F name="current_semester" label="Current term"><Input id="current_semester" name="current_semester" type="number" min={1} max={12} defaultValue={(d?.current_semester as number) ?? 1} /></F>
       <F name="status" label="Status">
         <Select id="status" name="status" defaultValue={(d?.status as string) ?? "active"}>{["active", "graduated", "withdrawn", "suspended"].map((s) => <option key={s} value={s}>{s}</option>)}</Select>
       </F>
@@ -60,7 +60,7 @@ export function FacultyFields({ lk, d }: { lk: Lookups; d?: Record<string, unkno
       <F name="designation" label="Designation"><Input id="designation" name="designation" defaultValue={d?.designation as string} placeholder="Assistant Professor" /></F>
       <F name="joined_on" label="Joined on"><Input id="joined_on" name="joined_on" type="date" defaultValue={(d?.joined_on as string) ?? ""} /></F>
       <Checkbox name="is_hod" defaultChecked={Boolean(d?.is_hod)} label="Head of department" />
-      <Checkbox name="is_public" defaultChecked={d ? Boolean(d.is_public) : true} label="Show in public faculty directory" />
+      <Checkbox name="is_public" defaultChecked={d ? Boolean(d.is_public) : true} label="Show in public teacher directory" />
     </div>
   );
 }

@@ -54,7 +54,7 @@ const ENTITIES = {
   },
   batch: {
     table: "batches", paths: ["/portal/admin/academic"],
-    schema: z.object({ programme_id: z.string().uuid("Choose a programme"), name: s(120).min(2), start_year: int(1990, 2100), current_semester: int(1, 12), is_active: bool }),
+    schema: z.object({ programme_id: z.string().uuid("Choose a class"), name: s(120).min(2), start_year: int(1990, 2100), current_semester: int(1, 12), is_active: bool }),
   },
   exam: {
     table: "exams", paths: ["/portal/admin/exams"],
@@ -104,7 +104,7 @@ export async function deleteEntity(kind: Kind, id: string): Promise<ActionResult
 export async function createOffering(_: ActionResult, fd: FormData): Promise<ActionResult> {
   try {
     await assertPermission("academics.manage");
-    const d = z.object({ course_id: z.string().uuid("Choose a course"), term_id: z.string().uuid("Choose a term"), batch_id: z.string().uuid("Choose a batch"), semester_number: int(1, 12), faculty_id: optUuid })
+    const d = z.object({ course_id: z.string().uuid("Choose a subject"), term_id: z.string().uuid("Choose a term"), batch_id: z.string().uuid("Choose a division"), semester_number: int(1, 12), faculty_id: optUuid })
       .parse(Object.fromEntries(fd));
     const db = await createClient();
     const { data: off, error } = await db.from("course_offerings").insert({ course_id: d.course_id, term_id: d.term_id, batch_id: d.batch_id, semester_number: d.semester_number }).select("id").single();
@@ -120,11 +120,11 @@ export async function createOffering(_: ActionResult, fd: FormData): Promise<Act
 export async function assignFaculty(offeringId: string, _: ActionResult, fd: FormData): Promise<ActionResult> {
   try {
     await assertPermission("academics.manage");
-    const facultyId = z.string().uuid("Choose a faculty member").parse(fd.get("faculty_id"));
+    const facultyId = z.string().uuid("Choose a teacher").parse(fd.get("faculty_id"));
     const db = await createClient();
     must(await db.from("offering_faculty").upsert({ offering_id: offeringId, faculty_id: facultyId }, { onConflict: "offering_id,faculty_id" }));
     revalidatePath(`/portal/admin/offerings/${offeringId}`);
-    return { ok: true, message: "Faculty assigned." };
+    return { ok: true, message: "Teacher assigned." };
   } catch (e) { return toActionError(e); }
 }
 
@@ -143,7 +143,7 @@ export async function syncEnrolments(offeringId: string): Promise<ActionResult> 
     const { data: studs } = await db.from("students").select("id").eq("batch_id", off!.batch_id).eq("status", "active");
     if (studs?.length) must(await db.from("enrolments").upsert(studs.map((st) => ({ offering_id: offeringId, student_id: st.id })), { onConflict: "offering_id,student_id", ignoreDuplicates: true }));
     revalidatePath(`/portal/admin/offerings/${offeringId}`);
-    return { ok: true, message: `${studs?.length ?? 0} active students in the batch are enrolled.` };
+    return { ok: true, message: `${studs?.length ?? 0} active students in the division are enrolled.` };
   } catch (e) { return toActionError(e); }
 }
 
@@ -155,7 +155,7 @@ export async function addSlot(offeringId: string, _: ActionResult, fd: FormData)
     const db = await createClient();
     must(await db.from("timetable_slots").insert({ ...d, offering_id: offeringId }));
     revalidatePath(`/portal/admin/offerings/${offeringId}`);
-    return { ok: true, message: "Class added to the timetable." };
+    return { ok: true, message: "Period added to the timetable." };
   } catch (e) { return toActionError(e); }
 }
 
@@ -212,7 +212,7 @@ export async function setExamStatus(examId: string, status: "scheduled" | "marks
 export async function addExamSession(examId: string, _: ActionResult, fd: FormData): Promise<ActionResult> {
   try {
     await assertPermission("academics.manage");
-    const d = z.object({ offering_id: z.string().uuid("Choose a course"), sits_on: z.string().min(1, "Date required"), starts_at: z.string().min(4), ends_at: z.string().min(4), venue: s(80) })
+    const d = z.object({ offering_id: z.string().uuid("Choose a subject"), sits_on: z.string().min(1, "Date required"), starts_at: z.string().min(4), ends_at: z.string().min(4), venue: s(80) })
       .refine((v) => v.ends_at > v.starts_at, { message: "End must be after start", path: ["ends_at"] }).parse(Object.fromEntries(fd));
     const db = await createClient();
     must(await db.from("exam_sessions").upsert({ ...d, exam_id: examId }, { onConflict: "exam_id,offering_id" }));

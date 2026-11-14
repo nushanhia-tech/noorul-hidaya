@@ -13,7 +13,7 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
   const [{ items, total }, notices] = await Promise.all([getNews(PAGE, (page - 1) * PAGE), getPublicNotices(30)]);
   return (
     <>
-      <PageHero eyebrow="News & notices" title="News and announcements" description="Stories from the campus and official notices from the college office." />
+      <PageHero eyebrow="News & notices" title="News and announcements" description="Stories from the campus and official notices from the school office." />
       <Container className="grid gap-12 py-14 sm:py-20 lg:grid-cols-[minmax(0,1fr)_360px]">
         <section aria-labelledby="news-h">
           <h2 id="news-h" className="mb-5 font-display text-2xl font-semibold">Latest news</h2>

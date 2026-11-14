@@ -21,7 +21,7 @@ export default async function StudentHelpdesk({ searchParams }: { searchParams: 
   const { data } = await q;
   return (
     <>
-      <PageHeader title="Help desk" description="Requests to the college office — certificates, receipts, record corrections and more."
+      <PageHeader title="Help desk" description="Requests to the school office — certificates, receipts, record corrections and more."
         actions={<LinkButton href="/portal/student/helpdesk/new"><Plus className="h-4 w-4" /> New request</LinkButton>} />
       <Tabs active={`/portal/student/helpdesk${view === "history" ? "?view=history" : ""}`} items={[
         { href: "/portal/student/helpdesk", label: "Active" },

@@ -15,7 +15,7 @@ export default async function StudentProfile() {
   const { data: profile } = await supabase.from("profiles").select("phone, email").eq("id", user.id).single();
   return (
     <>
-      <PageHeader title="My profile" description="Academic identifiers are maintained by the college office. Contact the office through the help desk to correct them." />
+      <PageHeader title="My profile" description="Academic identifiers are maintained by the school office. Contact the office through the help desk to correct them." />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
         <Card>
           <CardBody className="flex items-center gap-4 border-b border-line">
@@ -30,10 +30,10 @@ export default async function StudentProfile() {
             <KeyValue items={[
               { label: "Register number", value: <span className="tabular">{student.register_no}</span> },
               { label: "Admission number", value: student.admission_no },
-              { label: "Programme", value: student.programmes?.name },
+              { label: "Class", value: student.programmes?.name },
               { label: "Department", value: student.programmes?.departments?.name },
-              { label: "Batch", value: student.batches?.name },
-              { label: "Current semester", value: student.current_semester },
+              { label: "Division", value: student.batches?.name },
+              { label: "Current term", value: student.current_semester },
               { label: "Date of birth", value: formatDate(student.date_of_birth) },
               { label: "Gender", value: humanize(student.gender) },
               { label: "Guardian", value: student.guardian_name },

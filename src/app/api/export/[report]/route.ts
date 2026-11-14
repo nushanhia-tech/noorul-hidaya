@@ -118,7 +118,7 @@ const REPORTS: Record<string, Report> = {
         const p = s.profiles as unknown as { full_name: string; email: string };
         return [s.register_no, s.admission_no, p.full_name, p.email, (s.programmes as unknown as { code: string } | null)?.code ?? "", (s.batches as unknown as { name: string } | null)?.name ?? "", s.current_semester, s.status];
       });
-      return { name: "students", headers: ["Register no", "Admission no", "Name", "Email", "Programme", "Batch", "Semester", "Status"], rows };
+      return { name: "students", headers: ["Register no", "Admission no", "Name", "Email", "Class", "Division", "Term", "Status"], rows };
     },
   },
 };

@@ -36,7 +36,7 @@ export class PdfBuilder {
     b.letterhead = letterhead;
     b.watermark = opts.watermark;
     b.doc.setTitle(letterhead.collegeName);
-    b.doc.setProducer("College Management System");
+    b.doc.setProducer("School Management System");
     b.newPage();
     return b;
   }

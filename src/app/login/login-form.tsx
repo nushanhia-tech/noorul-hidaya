@@ -54,7 +54,7 @@ export function LoginForm({ next }: { next?: string }) {
         {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogIn className="h-4 w-4" />}
         {pending ? "Signing in…" : "Sign in"}
       </Button>
-      <p className="text-center text-[13px] text-muted">Accounts are issued by the college office. There is no public sign-up.</p>
+      <p className="text-center text-[13px] text-muted">Accounts are issued by the school office. There is no public sign-up.</p>
     </form>
   );
 }

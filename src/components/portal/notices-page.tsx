@@ -19,7 +19,7 @@ export async function NoticesPage({ searchParams, description }: { searchParams:
   const notices = (data ?? []);
   return (
     <>
-      <PageHeader title="Notices" description={description ?? "Circulars and announcements from the college."} />
+      <PageHeader title="Notices" description={description ?? "Circulars and announcements from the school."} />
       <FilterBar q={q} placeholder="Search notices" className="mb-5">
         <FilterSelect name="category" value={category} label="Category" options={["general","academic","examination","administrative","fee","event"].map((c) => ({ value: c, label: humanize(c) }))} />
       </FilterBar>

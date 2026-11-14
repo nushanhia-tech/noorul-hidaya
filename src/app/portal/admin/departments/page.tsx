@@ -13,7 +13,7 @@ export default async function DepartmentsAdmin() {
   const { data } = await db.from("departments").select("*, programmes(count), faculty(count)").order("sort_order").order("name");
   return (
     <>
-      <PageHeader title="Departments" description="Departments appear on the public website and own programmes, courses and faculty." />
+      <PageHeader title="Departments" description="Departments appear on the public website and own classes, subjects and teacher." />
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
         <Card>
           {(data ?? []).length === 0 ? <EmptyState title="No departments yet" /> : (data ?? []).map((d) => (
@@ -22,7 +22,7 @@ export default async function DepartmentsAdmin() {
                 <span className="tabular text-xs font-semibold text-accent">{d.code}</span>
                 <span className="font-medium">{d.name}</span>
                 {!d.is_published && <Badge tone="warning">Hidden</Badge>}
-                <span className="text-xs text-muted">{(d.programmes as { count: number }[])[0]?.count ?? 0} programmes · {(d.faculty as { count: number }[])[0]?.count ?? 0} faculty</span>
+                <span className="text-xs text-muted">{(d.programmes as { count: number }[])[0]?.count ?? 0} classes · {(d.faculty as { count: number }[])[0]?.count ?? 0} teacher</span>
               </div>
             }>
               <DepartmentForm d={d} id={d.id} />

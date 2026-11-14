@@ -23,16 +23,16 @@ export default async function MarksIndex() {
   const open = rows.filter((r) => r.exam.status === "marks_entry");
   const done = rows.filter((r) => r.exam.status !== "marks_entry");
   const cols = [
-    { key: "course", header: "Course", primary: true, cell: (r: (typeof rows)[number]) => <span><span className="tabular mr-2 text-faint">{r.offering.courses?.code}</span>{r.offering.courses?.title}</span> },
+    { key: "course", header: "Subject", primary: true, cell: (r: (typeof rows)[number]) => <span><span className="tabular mr-2 text-faint">{r.offering.courses?.code}</span>{r.offering.courses?.title}</span> },
     { key: "exam", header: "Examination", cell: (r: (typeof rows)[number]) => r.exam.name },
-    { key: "batch", header: "Batch", cell: (r: (typeof rows)[number]) => r.offering.batches?.name },
+    { key: "batch", header: "Division", cell: (r: (typeof rows)[number]) => r.offering.batches?.name },
     { key: "max", header: "Max", align: "right" as const, cell: (r: (typeof rows)[number]) => Number(r.exam.max_marks) },
     { key: "status", header: "Sheet", cell: (r: (typeof rows)[number]) => r.sheet ? <StatusBadge status={r.sheet.status} /> : <StatusBadge status="todo" label="Not started" /> },
     { key: "sub", header: "Submitted", cell: (r: (typeof rows)[number]) => formatDate(r.sheet?.submitted_at), mobileHidden: true },
   ];
   return (
     <>
-      <PageHeader title="Marks entry" description="Enter marks only for courses assigned to you. Submitted sheets are locked and sent for result publication." />
+      <PageHeader title="Marks entry" description="Enter marks only for subjects assigned to you. Submitted sheets are locked and sent for result publication." />
       <Card className="mb-6">
         <CardHeader title="Open for entry" />
         <DataTable rows={open} rowKey={(r) => `${r.exam.id}:${r.offering.id}`} rowHref={(r) => `/portal/faculty/marks/${r.exam.id}/${r.offering.id}`} columns={cols}

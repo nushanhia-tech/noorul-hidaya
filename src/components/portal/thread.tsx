@@ -7,7 +7,7 @@ export type ThreadMessage = { id: string; body: string; created_at: string; is_i
 export type Attachment = { id: string; file_name: string; size_bytes: number; created_at: string };
 
 /** Conversation timeline used by help desk tickets and parent messages. */
-export function Thread({ messages, me, requesterId, staffLabel = "College office" }: { messages: ThreadMessage[]; me: string; requesterId?: string; staffLabel?: string }) {
+export function Thread({ messages, me, requesterId, staffLabel = "School office" }: { messages: ThreadMessage[]; me: string; requesterId?: string; staffLabel?: string }) {
   return (
     <ol className="space-y-4">
       {messages.map((m) => {

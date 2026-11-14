@@ -23,7 +23,7 @@ const TABS: { key: string; label: string; type?: CmsType; table?: string; order?
   { key: "leadership", label: "Leadership", type: "leader", table: "leadership", order: "sort_order", title: (r) => r.name as string, sub: (r) => r.designation as string },
   { key: "calendar", label: "Calendar", type: "calendar", table: "calendar_entries", order: "starts_on", title: (r) => r.title as string, sub: (r) => formatDate(r.starts_on as string) },
 ];
-const PAGES = [{ slug: "about", label: "About the College" }, { slug: "mission-vision", label: "Mission & Vision" }, { slug: "administration", label: "Administration" }];
+const PAGES = [{ slug: "about", label: "About the School" }, { slug: "mission-vision", label: "Mission & Vision" }, { slug: "administration", label: "Administration" }];
 
 export default async function WebsiteAdmin({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   await requirePortal("admin");

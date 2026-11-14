@@ -7,16 +7,16 @@ import type { SiteSettings } from "@/lib/data/site";
 import { mediaUrl } from "@/lib/media";
 import { saveSettings } from "./actions";
 
-const SECTIONS: [string, string][] = [["intro", "Introduction / about"], ["departments", "Departments"], ["programmes", "Programmes"], ["achievements", "Achievements"], ["announcements", "Announcements"], ["news", "Latest news"], ["events", "Upcoming events"], ["gallery", "Gallery"], ["calendar", "Calendar highlights"], ["faculty", "Faculty highlights"], ["contact", "Contact"]];
+const SECTIONS: [string, string][] = [["intro", "Introduction / about"], ["departments", "Departments"], ["programmes", "Classes"], ["achievements", "Achievements"], ["announcements", "Announcements"], ["news", "Latest news"], ["events", "Upcoming events"], ["gallery", "Gallery"], ["calendar", "Calendar highlights"], ["faculty", "Teacher highlights"], ["contact", "Contact"]];
 
 export function SettingsForm({ s }: { s: SiteSettings }) {
   const logo = mediaUrl(s.logo_path);
   return (
     <ActionForm action={saveSettings} className="grid max-w-4xl gap-6">
       <Card>
-        <CardHeader title="College identity" />
+        <CardHeader title="School identity" />
         <CardBody className="grid gap-4 sm:grid-cols-2">
-          <F name="college_name" label="College name" required className="sm:col-span-2"><Input name="college_name" defaultValue={s.college_name} required /></F>
+          <F name="college_name" label="School name" required className="sm:col-span-2"><Input name="college_name" defaultValue={s.college_name} required /></F>
           <F name="short_name" label="Short name" required><Input name="short_name" defaultValue={s.short_name} required /></F>
           <F name="established_year" label="Established"><Input name="established_year" type="number" defaultValue={s.established_year ?? ""} /></F>
           <F name="motto" label="Motto" className="sm:col-span-2"><Input name="motto" defaultValue={s.motto} /></F>

@@ -30,7 +30,7 @@ export default async function ParentDashboard({ searchParams }: { searchParams: 
   return (
     <>
       <h1 className="mb-1 font-display text-[28px] font-semibold tracking-tight">{greeting()}, {user.fullName.split(" ")[0]}</h1>
-      <p className="mb-6 text-sm text-muted">Information shared with you about your ward, with the college&rsquo;s authorisation.</p>
+      <p className="mb-6 text-sm text-muted">Information shared with you about your ward, with the school&rsquo;s authorisation.</p>
       <StudentSwitcher students={students} current={current} base="/portal/parent" />
       <Card className="mb-6">
         <CardBody className="grid gap-6 md:grid-cols-[auto_1fr] md:items-center">
@@ -39,8 +39,8 @@ export default async function ParentDashboard({ searchParams }: { searchParams: 
             <p className="text-sm text-muted">{humanize(current.relationship)} link · {current.register_no}</p>
           </div>
           <KeyValue columns={3} items={[
-            { label: "Programme", value: current.programme }, { label: "Department", value: current.department },
-            { label: "Semester", value: current.current_semester },
+            { label: "Class", value: current.programme }, { label: "Department", value: current.department },
+            { label: "Term", value: current.current_semester },
           ]} />
         </CardBody>
       </Card>
@@ -52,7 +52,7 @@ export default async function ParentDashboard({ searchParams }: { searchParams: 
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
-          <CardHeader title="College notices" action={<Link href="/portal/parent/notices" className="text-[13px] font-medium text-royal hover:underline">All</Link>} />
+          <CardHeader title="School notices" action={<Link href="/portal/parent/notices" className="text-[13px] font-medium text-royal hover:underline">All</Link>} />
           {(notices ?? []).length === 0 ? <EmptyState title="No notices" /> : (
             <ul className="divide-y divide-line">{(notices ?? []).map((n) => <li key={n.id} className="px-5 py-3"><p className="text-sm font-medium">{n.title} {n.is_important && <Badge tone="accent">Important</Badge>}</p><p className="text-xs text-muted">{formatDate(n.published_at)} · {humanize(n.category)}</p></li>)}</ul>
           )}

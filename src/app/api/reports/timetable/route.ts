@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
   const pdf = await PdfBuilder.create(await getLetterhead());
   const stamp = `${term.name}  |  Generated ${formatDateTime(new Date())}`;
   const section = (heading: string) => { pdf.ensure(90); pdf.text(heading, { size: 12, font: pdf.bold }); pdf.space(4); };
-  const none = () => { pdf.text("No classes scheduled.", { size: 9.5 }); pdf.space(8); };
+  const none = () => { pdf.text("No periods scheduled.", { size: 9.5 }); pdf.space(8); };
 
   if (type === "class") {
     pdf.title("Class-wise timetable", stamp);
@@ -82,21 +82,21 @@ export async function GET(request: NextRequest) {
       if (rows.length) pdf.table(["Day", "Time", "Subject", "Teacher", "Room"], rows, [1.1, 1.6, 3, 2.2, 1]); else none();
     }
   } else if (type === "faculty") {
-    pdf.title("Faculty-wise timetable", stamp);
+    pdf.title("Teacher-wise timetable", stamp);
     const people = new Map<string, string>();
     for (const o of offerings) for (const f of o.offering_faculty) people.set(f.faculty.id, f.faculty.profiles.full_name);
     const sorted = [...people.entries()].filter(([id]) => !facultyFilter || id === facultyFilter).sort((a, b) => a[1].localeCompare(b[1]));
     if (!sorted.length) none();
     for (const [id, name] of sorted) {
       const list = offerings.filter((o) => o.offering_faculty.some((f) => f.faculty.id === id));
-      section(`${name}  (${list.reduce((n, o) => n + o.timetable_slots.length, 0)} classes per week)`);
+      section(`${name}  (${list.reduce((n, o) => n + o.timetable_slots.length, 0)} periods per week)`);
       const rows = slotRows(list, (o) => [subject(o), o.batches.name]);
       if (rows.length) pdf.table(["Day", "Time", "Subject", "Class", "Room"], rows, [1.1, 1.6, 3, 2.2, 1]); else none();
     }
   } else {
     pdf.title("All classes: subjects and teachers", stamp);
     const sorted = [...offerings].sort((a, b) => a.batches.name.localeCompare(b.batches.name) || a.courses.code.localeCompare(b.courses.code));
-    pdf.table(["Class", "Sem", "Subject", "Teacher", "Classes/wk"],
+    pdf.table(["Class", "Sem", "Subject", "Teacher", "Periods/wk"],
       sorted.map((o) => [o.batches.name, o.semester_number, subject(o), teachers(o), o.timetable_slots.length]), [2.2, 0.6, 3.2, 2.4, 1], ["left", "right", "left", "left", "right"]);
     section("Full weekly timetable");
     const rows = slotRows(sorted, (o) => [o.batches.name, subject(o), teachers(o)]);

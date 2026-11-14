@@ -22,7 +22,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
             </nav>
             <form action="/search" role="search" className="flex flex-1 items-center gap-2.5 px-8">
               <Search className="h-4 w-4 text-royal" aria-hidden />
-              <input name="q" type="search" placeholder="Search programmes, departments, news…" aria-label="Search the website"
+              <input name="q" type="search" placeholder="Search classes, departments, news…" aria-label="Search the website"
                 className="h-full w-full bg-transparent text-sm placeholder:text-faint focus:outline-none" />
             </form>
             <Link href="/login" className="flex items-center gap-2 bg-royal px-8 text-sm font-medium text-white transition-colors hover:bg-royal-600">

@@ -7,7 +7,7 @@ export type TimetableEntry = { id: string; day: number; start: string; end: stri
 
 /** Week grid on desktop; per-day agenda lists on mobile. */
 export function WeekTimetable({ entries, today }: { entries: TimetableEntry[]; today: number }) {
-  if (!entries.length) return <EmptyState icon={CalendarX} title="No classes scheduled" description="The timetable for the current term has not been published yet." />;
+  if (!entries.length) return <EmptyState icon={CalendarX} title="No periods scheduled" description="The timetable for the current term has not been published yet." />;
   const days = [1, 2, 3, 4, 5, 6].filter((d) => d <= 5 || entries.some((e) => e.day === d));
   return (
     <>
@@ -26,7 +26,7 @@ export function WeekTimetable({ entries, today }: { entries: TimetableEntry[]; t
                   {e.sub && <p className="mt-0.5 truncate text-[11.5px] text-faint">{e.sub}</p>}
                 </li>
               ))}
-              {!entries.some((e) => e.day === d) && <li className="px-1 py-3 text-center text-xs text-faint">No classes</li>}
+              {!entries.some((e) => e.day === d) && <li className="px-1 py-3 text-center text-xs text-faint">No periods</li>}
             </ul>
           </div>
         ))}
@@ -44,7 +44,7 @@ export function WeekTimetable({ entries, today }: { entries: TimetableEntry[]; t
 }
 
 export function DayAgenda({ entries }: { entries: TimetableEntry[] }) {
-  if (!entries.length) return <p className="rounded-md border border-dashed border-line px-4 py-5 text-center text-sm text-muted">No classes</p>;
+  if (!entries.length) return <p className="rounded-md border border-dashed border-line px-4 py-5 text-center text-sm text-muted">No periods</p>;
   return (
     <ol className="divide-y divide-line rounded-md border border-line bg-paper">
       {entries.map((e) => (

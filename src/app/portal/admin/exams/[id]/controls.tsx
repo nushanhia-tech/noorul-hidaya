@@ -50,7 +50,7 @@ export function ReturnForm({ examId, sheetId }: { examId: string; sheetId: strin
 export function SessionForm({ examId, offerings }: { examId: string; offerings: { value: string; label: string }[] }) {
   return (
     <ActionForm action={addExamSession.bind(null, examId)} className="grid gap-3 sm:grid-cols-2">
-      <F name="offering_id" label="Course" className="sm:col-span-2"><Select name="offering_id" defaultValue="" required><option value="" disabled>Choose</option>{offerings.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</Select></F>
+      <F name="offering_id" label="Subject" className="sm:col-span-2"><Select name="offering_id" defaultValue="" required><option value="" disabled>Choose</option>{offerings.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</Select></F>
       <F name="sits_on" label="Date"><Input name="sits_on" type="date" required /></F>
       <F name="venue" label="Venue"><Input name="venue" /></F>
       <F name="starts_at" label="Starts"><Input name="starts_at" type="time" defaultValue="10:00" required /></F>

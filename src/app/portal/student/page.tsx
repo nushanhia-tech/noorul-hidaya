@@ -53,7 +53,7 @@ export default async function StudentDashboard() {
       </section>
 
       <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard label="Classes today" value={todays.length} icon={CalendarClock} tone="teal" href="/portal/student/timetable" />
+        <StatCard label="Periods today" value={todays.length} icon={CalendarClock} tone="teal" href="/portal/student/timetable" />
         <StatCard label="Upcoming exams" value={exList.length} icon={BookOpen} tone="royal" />
         <StatCard label="Fees outstanding" value={formatMoney(bal?.outstanding ?? 0)} hint={bal?.next_due ? `Next due ${formatDate(bal.next_due)}` : "Nothing due"} icon={Wallet} tone={Number(bal?.outstanding) > 0 ? "accent" : "neutral"} href="/portal/student/fees" />
         <StatCard label="Open requests" value={tickets.data?.length ?? 0} icon={LifeBuoy} tone="plum" href="/portal/student/helpdesk" />
@@ -107,7 +107,7 @@ export default async function StudentDashboard() {
             )}
           </Card>
           <Card>
-            <CardHeader title="College notices" action={<Link href="/portal/student/notices" className="text-[13px] font-medium text-royal hover:underline">All</Link>} />
+            <CardHeader title="School notices" action={<Link href="/portal/student/notices" className="text-[13px] font-medium text-royal hover:underline">All</Link>} />
             {(notices.data ?? []).length === 0 ? <EmptyState title="No notices" /> : (
               <ul className="divide-y divide-line">
                 {(notices.data ?? []).map((n) => (

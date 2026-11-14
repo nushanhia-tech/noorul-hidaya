@@ -21,7 +21,7 @@ export async function AuthShell({ title, description, children }: { title: strin
           <p className="eyebrow text-accent-100">{s.motto}</p>
           <p className="display-xl mt-4 text-[44px]">One campus.<br />Five portals.<br />One record.</p>
           <p className="mt-6 text-[15px] leading-relaxed text-white/60">
-            Students, faculty, parents, administrators and office staff sign in here. You will be taken to the portal your account is authorised for.
+            Students, teacher, parents, administrators and office staff sign in here. You will be taken to the portal your account is authorised for.
           </p>
         </div>
         <p className="relative text-xs text-white/40">Protected system. Access is logged and limited to authorised users.</p>

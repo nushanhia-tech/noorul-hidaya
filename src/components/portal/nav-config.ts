@@ -26,7 +26,7 @@ export const PORTAL_NAV: Record<Portal, NavGroup[]> = {
     links: [
       { label: "Dashboard", href: "/portal/faculty", icon: "dashboard", mobile: true },
       { label: "Timetable", href: "/portal/faculty/timetable", icon: "clock", mobile: true },
-      { label: "My Courses", href: "/portal/faculty/courses", icon: "courses", mobile: true },
+      { label: "My Subjects", href: "/portal/faculty/courses", icon: "courses", mobile: true },
       { label: "Marks Entry", href: "/portal/faculty/marks", icon: "pen", mobile: true },
       { label: "Academic Progress", href: "/portal/faculty/progress", icon: "trending" },
       { label: "Reports", href: "/portal/faculty/reports", icon: "chart" },
@@ -58,7 +58,7 @@ export const PORTAL_NAV: Record<Portal, NavGroup[]> = {
       title: "Academics",
       links: [
         { label: "Departments", href: "/portal/admin/departments", icon: "building", permission: "academics.manage" },
-        { label: "Programmes & Courses", href: "/portal/admin/programmes", icon: "graduation", permission: "academics.manage", mobile: true },
+        { label: "Classes & Subjects", href: "/portal/admin/programmes", icon: "graduation", permission: "academics.manage", mobile: true },
         { label: "Academic Setup", href: "/portal/admin/academic", icon: "calendar", permission: "academics.manage" },
         { label: "Offerings & Timetable", href: "/portal/admin/offerings", icon: "clock", permission: "academics.manage" },
         { label: "Timetable Schedule", href: "/portal/admin/timetable", icon: "calendar", permission: "academics.manage" },

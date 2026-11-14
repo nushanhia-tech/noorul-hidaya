@@ -6,7 +6,7 @@ import { formatDate } from "@/lib/format";
 import { mediaUrl } from "@/lib/media";
 import { FacultyProfileForm } from "./form";
 
-export const metadata = { title: "Faculty Profile" };
+export const metadata = { title: "Teacher Profile" };
 
 export default async function FacultyProfile() {
   const { user, faculty } = await getMyFaculty();
@@ -15,7 +15,7 @@ export default async function FacultyProfile() {
   const { data: p } = await supabase.from("profiles").select("email, phone").eq("id", user.id).single();
   return (
     <>
-      <PageHeader title="Faculty profile" description="Your public directory entry uses your qualification, specialisation and bio." />
+      <PageHeader title="Teacher profile" description="Your public directory entry uses your qualification, specialisation and bio." />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
         <div className="space-y-6">
           <Card>
@@ -32,7 +32,7 @@ export default async function FacultyProfile() {
             </CardBody>
           </Card>
           <Card>
-            <CardHeader title="Assigned courses" description="Current term" />
+            <CardHeader title="Assigned subjects" description="Current term" />
             <ul className="divide-y divide-line">
               {offerings.map((o) => <li key={o.id} className="px-5 py-3 text-sm"><span className="font-medium">{offeringLabel(o)}</span><span className="block text-xs text-muted">{o.batches?.name}</span></li>)}
               {!offerings.length && <li className="px-5 py-4 text-sm text-muted">None assigned.</li>}

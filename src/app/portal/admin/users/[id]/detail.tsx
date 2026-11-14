@@ -64,8 +64,8 @@ export function UserDetail({ profile, roles, student, faculty, lk, sections, can
         )}
         {(selRoles.includes("faculty") || faculty) && (
           <Card>
-            <CardHeader title="Faculty record" />
-            <CardBody><ActionForm action={saveFacultyRecord.bind(null, profile.id)} className="space-y-4"><FacultyFields lk={lk} d={faculty ?? undefined} /><SubmitButton variant="dark">Save faculty record</SubmitButton></ActionForm></CardBody>
+            <CardHeader title="Teacher record" />
+            <CardBody><ActionForm action={saveFacultyRecord.bind(null, profile.id)} className="space-y-4"><FacultyFields lk={lk} d={faculty ?? undefined} /><SubmitButton variant="dark">Save teacher record</SubmitButton></ActionForm></CardBody>
           </Card>
         )}
         {selRoles.includes("parent") && (

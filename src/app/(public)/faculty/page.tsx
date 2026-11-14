@@ -5,7 +5,7 @@ import { Avatar, EmptyState } from "@/components/ui/misc";
 import { FilterBar, FilterSelect } from "@/components/ui/search";
 import { mediaUrl } from "@/lib/media";
 
-export const metadata = { title: "Faculty Directory" };
+export const metadata = { title: "Teacher Directory" };
 
 export default async function FacultyDirectoryPage({ searchParams }: { searchParams: Promise<{ q?: string; department?: string }> }) {
   const { q, department } = await searchParams;
@@ -14,12 +14,12 @@ export default async function FacultyDirectoryPage({ searchParams }: { searchPar
   for (const f of faculty) grouped.set(f.department_name, [...(grouped.get(f.department_name) ?? []), f]);
   return (
     <>
-      <PageHero eyebrow="Faculty" title="Faculty directory" description="Teachers and scholars across our departments." />
+      <PageHero eyebrow="Teachers" title="Teacher directory" description="Teachers and scholars across our departments." />
       <Container className="py-12 sm:py-16">
         <FilterBar q={q} placeholder="Search by name">
           <FilterSelect name="department" value={department} label="Department" options={departments.map((d) => ({ value: d.slug, label: d.name }))} />
         </FilterBar>
-        {faculty.length === 0 ? <EmptyState className="mt-8" title="No faculty found" description="Try a different name or department." /> : (
+        {faculty.length === 0 ? <EmptyState className="mt-8" title="No teacher found" description="Try a different name or department." /> : (
           <div className="mt-10 space-y-12">
             {[...grouped.entries()].map(([dept, members]) => (
               <section key={dept}>

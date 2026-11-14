@@ -36,12 +36,12 @@ export async function signIn(input: LoginInput): Promise<ActionResult> {
     if (!profile?.is_active) {
       await supabase.auth.signOut();
       await logSecurityEvent("login_blocked_inactive", data.user.id);
-      return { ok: false, error: "This account has been deactivated. Please contact the college office." };
+      return { ok: false, error: "This account has been deactivated. Please contact the school office." };
     }
     const roleList = (roles ?? []).map((r) => r.role).filter(isRole);
     if (!roleList.length) {
       await supabase.auth.signOut();
-      return { ok: false, error: "Your account has no portal access yet. Please contact the college office." };
+      return { ok: false, error: "Your account has no portal access yet. Please contact the school office." };
     }
     await logSecurityEvent("login_success", data.user.id);
 

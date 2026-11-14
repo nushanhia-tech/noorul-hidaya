@@ -27,7 +27,7 @@ export function NewUserForm({ lk }: { lk: Lookups }) {
         <CardBody className="space-y-5"><RoleCheckboxes selected={roles} onChange={setRoles} /><SectionFields lk={lk} selected={[]} roles={roles} /></CardBody>
       </Card>
       {roles.includes("student") && <Card><CardHeader title="Student record" /><CardBody><StudentFields lk={lk} /></CardBody></Card>}
-      {roles.includes("faculty") && <Card><CardHeader title="Faculty record" /><CardBody><FacultyFields lk={lk} /></CardBody></Card>}
+      {roles.includes("faculty") && <Card><CardHeader title="Teacher record" /><CardBody><FacultyFields lk={lk} /></CardBody></Card>}
       {roles.includes("parent") && <p className="text-sm text-muted">After creating a parent account, link it to a student from the user&rsquo;s page.</p>}
       <div><SubmitButton size="lg" pendingLabel="Creating…">Create user</SubmitButton></div>
     </ActionForm>

@@ -72,7 +72,7 @@ export function SetupNotice() {
   return (
     <Container className="py-6">
       <div className="rounded-sm border border-warning/25 bg-warning-50 px-4 py-3 text-[13px] text-warning">
-        <strong>Setup required:</strong> this site is not yet connected to its database. Configure Supabase as described in the README to load college content.
+        <strong>Setup required:</strong> this site is not yet connected to its database. Configure Supabase as described in the README to load school content.
       </div>
     </Container>
   );

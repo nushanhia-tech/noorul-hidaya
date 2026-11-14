@@ -23,7 +23,7 @@ export function NoLinkedStudent({ pending }: { pending: number }) {
   return (
     <Card>
       <EmptyState icon={UserX} title={pending ? "Your link to a student is awaiting verification" : "No student is linked to your account"}
-        description="The college office verifies parent–student links (and, for adult students, records the student's consent) before any information is shared." />
+        description="The school office verifies parent–student links (and, for adult students, records the student's consent) before any information is shared." />
     </Card>
   );
 }

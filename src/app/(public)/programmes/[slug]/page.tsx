@@ -9,7 +9,7 @@ export const revalidate = 300;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const data = await getProgramme((await params).slug);
-  return { title: data?.programme.name ?? "Programme" };
+  return { title: data?.programme.name ?? "Class" };
 }
 
 export default async function ProgrammePage({ params }: { params: Promise<{ slug: string }> }) {
@@ -19,7 +19,7 @@ export default async function ProgrammePage({ params }: { params: Promise<{ slug
   const semesters = Array.from(new Set(courses.map((c) => c.semester_number ?? 0))).sort((a, b) => a - b);
   return (
     <>
-      <PageHero eyebrow={`${p.level} programme · ${p.code}`} title={p.name} description={p.summary}>
+      <PageHero eyebrow={`${p.level} class · ${p.code}`} title={p.name} description={p.summary}>
         {p.departments && <p className="mt-4 text-sm">Offered by <Link className="font-medium underline underline-offset-4" href={`/departments/${p.departments.slug}`}>{p.departments.name}</Link></p>}
       </PageHero>
       <Container className="grid gap-12 py-14 sm:py-20 lg:grid-cols-[minmax(0,1fr)_320px]">
@@ -27,11 +27,11 @@ export default async function ProgrammePage({ params }: { params: Promise<{ slug
           {p.description && <RichText text={p.description} className="text-[16.5px]" />}
           {courses.length > 0 && (
             <>
-              <h2 className="mt-12 font-display text-2xl font-semibold">Course structure</h2>
+              <h2 className="mt-12 font-display text-2xl font-semibold">Subject structure</h2>
               <div className="mt-5 space-y-6">
                 {semesters.map((s) => (
                   <div key={s} className="overflow-hidden rounded-md border border-line bg-paper">
-                    <p className="border-b border-line bg-ivory px-5 py-2.5 text-sm font-semibold">{s ? `Semester ${s}` : "Across semesters"}</p>
+                    <p className="border-b border-line bg-ivory px-5 py-2.5 text-sm font-semibold">{s ? `Term ${s}` : "Across terms"}</p>
                     <ul className="divide-y divide-line">
                       {courses.filter((c) => (c.semester_number ?? 0) === s).map((c) => (
                         <li key={c.code} className="flex items-center justify-between gap-4 px-5 py-3 text-sm">

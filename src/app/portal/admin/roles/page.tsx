@@ -18,7 +18,7 @@ export default async function RolesPage() {
       <PageHeader title="Roles & permissions" description="Fine-grained permissions per role. The database enforces these through row-level security, not just the interface." />
       {!can(me, "roles.manage") && <Notice tone="warning" className="mb-5">You can view but not change permissions.</Notice>}
       <Notice tone="info" className="mb-6">
-        Some rules are fixed by design and cannot be granted away: students see only their own records, parents only verified linked students, and faculty enter marks only for courses assigned to them.
+        Some rules are fixed by design and cannot be granted away: students see only their own records, parents only verified linked students, and teacher enter marks only for subjects assigned to them.
       </Notice>
       <MatrixForm
         roles={ROLES.filter((r) => r !== "student" && r !== "parent" && r !== "faculty").map((r) => ({ key: r, label: ROLE_LABELS[r] }))}

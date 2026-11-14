@@ -27,13 +27,13 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
   const qs = (p: number) => `/portal/admin/users?${new URLSearchParams({ ...(sp.q ? { q: sp.q } : {}), ...(sp.role ? { role: sp.role } : {}), ...(sp.status ? { status: sp.status } : {}), page: String(p) })}`;
   return (
     <>
-      <PageHeader title="Users" description="Accounts for students, faculty, parents, administrators and office staff."
+      <PageHeader title="Users" description="Accounts for students, teacher, parents, administrators and office staff."
         actions={<>
           <a href="/api/export/users" className="inline-flex h-10 items-center gap-1.5 rounded-sm border border-line-strong bg-paper px-3 text-sm hover:bg-white"><Download className="h-4 w-4" /> CSV</a>
           <LinkButton href="/portal/admin/users/new"><UserPlus className="h-4 w-4" /> New user</LinkButton>
         </>} />
       <Tabs active={`/portal/admin/users${sp.role ? `?role=${sp.role}` : ""}`} items={[
-        { href: "/portal/admin/users", label: "All users" }, { href: "/portal/admin/users?role=faculty", label: "Faculty" },
+        { href: "/portal/admin/users", label: "All users" }, { href: "/portal/admin/users?role=faculty", label: "Teachers" },
         { href: "/portal/admin/users?role=student", label: "Students" }, { href: "/portal/admin/users?role=parent", label: "Parents" },
         { href: "/portal/admin/users?role=office_clerk", label: "Office clerks" }, { href: "/portal/admin/users?role=accountant", label: "Accountants" },
         { href: "/portal/admin/users?role=admin", label: "Administrators" },

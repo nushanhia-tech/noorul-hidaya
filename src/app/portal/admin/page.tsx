@@ -55,7 +55,7 @@ export default async function AdminDashboard() {
       </div>
       <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard label="Active students" value={students.count ?? 0} icon={GraduationCap} tone="teal" href="/portal/admin/users?role=student" />
-        <StatCard label="Faculty" value={faculty.count ?? 0} icon={School} tone="royal" href="/portal/admin/users?role=faculty" />
+        <StatCard label="Teachers" value={faculty.count ?? 0} icon={School} tone="royal" href="/portal/admin/users?role=faculty" />
         <StatCard label="Departments" value={departments.count ?? 0} icon={Building2} href="/portal/admin/departments" />
         <StatCard label="Active users" value={active.count ?? 0} hint={`${inactive.count ?? 0} deactivated`} icon={Users} tone="accent" href="/portal/admin/users" />
       </div>

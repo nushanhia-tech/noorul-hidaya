@@ -23,7 +23,7 @@ export function ResultsTable({ rows }: { rows: ResultRow[] }) {
       rows={rows}
       rowKey={(r) => r.id}
       columns={[
-        { key: "course", header: "Course", primary: true, cell: (r) => <span><span className="tabular mr-2 text-faint">{r.course_code}</span><span className="font-medium text-ink">{r.course_title}</span></span> },
+        { key: "course", header: "Subject", primary: true, cell: (r) => <span><span className="tabular mr-2 text-faint">{r.course_code}</span><span className="font-medium text-ink">{r.course_title}</span></span> },
         { key: "credits", header: "Credits", align: "right", cell: (r) => Number(r.credits) },
         { key: "marks", header: "Marks", align: "right", cell: (r) => (r.is_absent ? "AB" : `${Number(r.marks)}/${Number(r.max_marks)}`) },
         { key: "grade", header: "Grade", align: "right", cell: (r) => <Badge tone={r.passed ? "success" : "danger"}>{r.grade}</Badge> },

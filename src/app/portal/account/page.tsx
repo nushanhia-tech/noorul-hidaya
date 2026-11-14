@@ -20,7 +20,7 @@ export default async function AccountPage() {
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="space-y-6">
           <Card>
-            <CardHeader title="Account" description="Official details are maintained by the college office." />
+            <CardHeader title="Account" description="Official details are maintained by the school office." />
             <CardBody className="flex flex-col gap-6 sm:flex-row">
               <Avatar name={user.fullName} src={mediaUrl(user.avatarPath)} size={72} />
               <KeyValue items={[

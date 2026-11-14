@@ -13,7 +13,7 @@ const ICONS: Record<Portal, React.ComponentType<{ className?: string }>> = {
 };
 const DESCRIPTIONS: Record<Portal, string> = {
   student: "Timetable, results, fees, materials and help desk",
-  faculty: "Courses, marks entry, resources and reports",
+  faculty: "Subjects, marks entry, resources and reports",
   parent: "Your ward's results, fees and notices",
   admin: "Users, academics, website and settings",
   office: "Files, accounts, tasks, letters and help desk",

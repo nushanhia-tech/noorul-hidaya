@@ -16,7 +16,7 @@ export default async function SecurityPage({ searchParams }: { searchParams: Pro
   return (
     <>
       <PageHeader title="Security" description="Two-step verification with an authenticator app (TOTP)." back={{ href: "/portal/account", label: "Account settings" }} />
-      {required && <Notice tone="warning" className="mb-6" title="Two-step verification required">The college requires two-step verification for your role. Set it up below to continue to your portal.</Notice>}
+      {required && <Notice tone="warning" className="mb-6" title="Two-step verification required">The school requires two-step verification for your role. Set it up below to continue to your portal.</Notice>}
       <Card className="max-w-2xl">
         <CardHeader title="Authenticator app" description={verified.length ? "Two-step verification is on." : "Two-step verification is off."} />
         <CardBody>

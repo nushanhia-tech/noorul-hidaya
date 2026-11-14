@@ -22,8 +22,8 @@ export default async function DepartmentPage({ params }: { params: Promise<{ slu
       <Container className="grid gap-12 py-14 sm:py-20 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div>
           {d.description ? <RichText text={d.description} className="text-[16.5px]" /> : <p className="text-muted">No description yet.</p>}
-          <h2 className="mt-14 font-display text-2xl font-semibold">Faculty</h2>
-          {faculty.length === 0 ? <p className="mt-3 text-sm text-muted">Faculty profiles will appear here.</p> : (
+          <h2 className="mt-14 font-display text-2xl font-semibold">Teacher</h2>
+          {faculty.length === 0 ? <p className="mt-3 text-sm text-muted">Teacher profiles will appear here.</p> : (
             <ul className="mt-5 grid gap-3 sm:grid-cols-2">
               {faculty.map((f) => (
                 <li key={f.id} className="flex gap-4 rounded-md border border-line bg-paper p-4">
@@ -39,7 +39,7 @@ export default async function DepartmentPage({ params }: { params: Promise<{ slu
           )}
         </div>
         <aside className="h-fit rounded-md border border-line bg-paper lg:sticky lg:top-32">
-          <h2 className="border-b border-line px-5 py-4 text-sm font-semibold">Programmes offered</h2>
+          <h2 className="border-b border-line px-5 py-4 text-sm font-semibold">Classes offered</h2>
           {programmes.length === 0 ? <p className="px-5 py-4 text-sm text-muted">None listed.</p> : (
             <ul className="divide-y divide-line">
               {programmes.map((p) => (

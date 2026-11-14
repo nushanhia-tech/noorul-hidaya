@@ -5,7 +5,7 @@ import { getProgrammes } from "@/lib/data/public";
 import { EmptyState } from "@/components/ui/misc";
 
 export const revalidate = 300;
-export const metadata = { title: "Courses & Programmes" };
+export const metadata = { title: "Subjects & Classes" };
 
 const LEVEL_NAMES: Record<string, string> = { UG: "Undergraduate", PG: "Postgraduate", Diploma: "Diploma", Certificate: "Certificate", Doctoral: "Doctoral" };
 
@@ -14,12 +14,12 @@ export default async function ProgrammesPage() {
   const levels = Array.from(new Set(programmes.map((p) => p.level)));
   return (
     <>
-      <PageHero eyebrow="Courses & programmes" title="Programmes of study" description="Structured, semester-based programmes taught by the college's departments." />
+      <PageHero eyebrow="Subjects & classes" title="Classes of study" description="Structured, term-based classes taught by the school's departments." />
       <Container className="py-14 sm:py-20">
-        {programmes.length === 0 && <EmptyState title="No programmes published yet" />}
+        {programmes.length === 0 && <EmptyState title="No classes published yet" />}
         {levels.map((level) => (
           <section key={level} className="mb-14 last:mb-0">
-            <h2 className="mb-5 font-display text-2xl font-semibold">{LEVEL_NAMES[level] ?? level} programmes</h2>
+            <h2 className="mb-5 font-display text-2xl font-semibold">{LEVEL_NAMES[level] ?? level} classes</h2>
             <div className="grid gap-4 md:grid-cols-2">
               {programmes.filter((p) => p.level === level).map((p) => (
                 <Link key={p.id} href={`/programmes/${p.slug}`} className="group rounded-md border border-line bg-paper p-6 hover:border-line-strong">
@@ -33,7 +33,7 @@ export default async function ProgrammesPage() {
                   </div>
                   {p.summary && <p className="mt-4 line-clamp-2 text-sm leading-relaxed text-ink-soft">{p.summary}</p>}
                   <p className="mt-5 flex gap-4 border-t border-line pt-4 text-[13px] text-muted">
-                    <span>{p.duration_semesters} semesters</span>
+                    <span>{p.duration_semesters} terms</span>
                     {p.intake ? <span>Intake {p.intake}</span> : null}
                   </p>
                 </Link>

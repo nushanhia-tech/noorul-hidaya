@@ -40,8 +40,8 @@ export default async function ExamDetail({ params }: { params: Promise<{ id: str
       </Card>
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
         <Card>
-          <CardHeader title="Mark sheets by course" />
-          {offs.length === 0 ? <EmptyState title="No course offerings in this term" /> : offs.map((o) => {
+          <CardHeader title="Mark sheets by subject" />
+          {offs.length === 0 ? <EmptyState title="No subject offerings in this term" /> : offs.map((o) => {
             const sh = sheetBy.get(o.id);
             const se = sessBy.get(o.id);
             return (

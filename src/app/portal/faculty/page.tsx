@@ -9,7 +9,7 @@ import { StatusBadge, Badge } from "@/components/ui/badge";
 import { DayAgenda } from "@/components/portal/timetable";
 import { formatDate, greeting, isoWeekday, relativeTime } from "@/lib/format";
 
-export const metadata = { title: "Faculty Dashboard" };
+export const metadata = { title: "Teacher Dashboard" };
 
 export default async function FacultyDashboard() {
   const { user, faculty } = await getMyFaculty();
@@ -42,15 +42,15 @@ export default async function FacultyDashboard() {
         <p className="mt-2 text-sm text-ink-soft">{faculty.designation} · {faculty.departments?.name}{faculty.is_hod && " · Head of Department"}</p>
       </section>
       <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard label="Courses this term" value={offerings.length} icon={LibraryBig} tone="royal" href="/portal/faculty/courses" />
-        <StatCard label="Classes today" value={todays.length} icon={CalendarClock} tone="teal" href="/portal/faculty/timetable" />
+        <StatCard label="Subjects this term" value={offerings.length} icon={LibraryBig} tone="royal" href="/portal/faculty/courses" />
+        <StatCard label="Periods today" value={todays.length} icon={CalendarClock} tone="teal" href="/portal/faculty/timetable" />
         <StatCard label="Students taught" value={students} icon={Users} />
         <StatCard label="Pending mark sheets" value={pending.length} icon={PenLine} tone={pending.length ? "accent" : "neutral"} href="/portal/faculty/marks" />
       </div>
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
         <div className="space-y-6">
           <Card>
-            <CardHeader title="Today's classes" action={<Link className="text-[13px] font-medium text-royal hover:underline" href="/portal/faculty/timetable">Week view</Link>} />
+            <CardHeader title="Today's periods" action={<Link className="text-[13px] font-medium text-royal hover:underline" href="/portal/faculty/timetable">Week view</Link>} />
             <CardBody><DayAgenda entries={todays} /></CardBody>
           </Card>
           <Card>
@@ -71,8 +71,8 @@ export default async function FacultyDashboard() {
         </div>
         <div className="space-y-6">
           <Card>
-            <CardHeader title="Assigned courses" />
-            {offerings.length === 0 ? <EmptyState title="No courses assigned for the current term" /> : (
+            <CardHeader title="Assigned subjects" />
+            {offerings.length === 0 ? <EmptyState title="No subjects assigned for the current term" /> : (
               <ul className="divide-y divide-line">
                 {offerings.map((o) => (
                   <li key={o.id}><Link href={`/portal/faculty/courses/${o.id}`} className="block px-5 py-3 hover:bg-white">

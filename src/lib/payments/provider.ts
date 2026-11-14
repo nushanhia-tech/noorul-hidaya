@@ -17,7 +17,7 @@ export function providerStatus(): ProviderStatus {
     return { configured: false, reason: "Razorpay is selected but RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET are missing." };
   }
   if (env.paymentProvider === "sandbox") return { configured: true, name: "sandbox", mode: "sandbox" };
-  return { configured: false, reason: "Online payments have not been set up by the college yet." };
+  return { configured: false, reason: "Online payments have not been set up by the school yet." };
 }
 
 export async function createOrder(amount: number, currency: string, receipt: string, notes: Record<string, string>): Promise<CreatedOrder> {

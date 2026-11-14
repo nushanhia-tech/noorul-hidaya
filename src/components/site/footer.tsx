@@ -16,8 +16,8 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/60">{settings.footer_text || settings.motto}</p>
           {settings.affiliation && <p className="mt-3 text-xs text-white/45">{settings.affiliation}</p>}
         </div>
-        <FooterCol title="Institution" links={[["About", "/about"], ["Mission & Vision", "/about/mission-vision"], ["Administration", "/about/administration"], ["Departments", "/departments"], ["Faculty Directory", "/faculty"]]} />
-        <FooterCol title="Academics" links={[["Programmes", "/programmes"], ["Academic Calendar", "/calendar"], ["News & Notices", "/news"], ["Events", "/events"], ["Gallery", "/gallery"]]} />
+        <FooterCol title="Institution" links={[["About", "/about"], ["Mission & Vision", "/about/mission-vision"], ["Administration", "/about/administration"], ["Departments", "/departments"], ["Teacher Directory", "/faculty"]]} />
+        <FooterCol title="Academics" links={[["Classes", "/programmes"], ["Academic Calendar", "/calendar"], ["News & Notices", "/news"], ["Events", "/events"], ["Gallery", "/gallery"]]} />
         <div>
           <h2 className="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-white/45">Contact</h2>
           <ul className="space-y-3 text-sm">

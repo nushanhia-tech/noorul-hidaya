@@ -16,11 +16,11 @@ const meta = z.object({
 export async function uploadResource(_: ActionResult, fd: FormData): Promise<ActionResult> {
   try {
     const { user } = await getMyFaculty();
-    const offeringId = z.string().uuid("Choose a course").parse(fd.get("offering_id"));
+    const offeringId = z.string().uuid("Choose a subject").parse(fd.get("offering_id"));
     const data = meta.parse(Object.fromEntries(fd));
     const supabase = await createClient();
     const { data: teaches } = await supabase.rpc("faculty_teaches_offering", { p_offering: offeringId });
-    if (!teaches) return { ok: false, error: "You can only upload resources to courses you teach." };
+    if (!teaches) return { ok: false, error: "You can only upload resources to subjects you teach." };
     const file = fd.get("file");
     if (!(file instanceof File) || file.size === 0) return { ok: false, error: "Choose a file.", fieldErrors: { file: "Required" } };
     const stored = await storePrivateFile(file, `resources/${offeringId}`);

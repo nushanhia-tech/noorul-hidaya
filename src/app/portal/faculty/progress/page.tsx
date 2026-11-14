@@ -15,7 +15,7 @@ export default async function ProgressPage({ searchParams }: { searchParams: Pro
   const { faculty } = await getMyFaculty();
   const offerings = await getMyOfferings(faculty.id, false);
   const current = offerings.find((o) => o.id === sel) ?? offerings.find((o) => o.terms?.is_current) ?? offerings[0];
-  if (!current) return <><PageHeader title="Academic progress" /><Card><EmptyState icon={TrendingUp} title="No courses assigned" /></Card></>;
+  if (!current) return <><PageHeader title="Academic progress" /><Card><EmptyState icon={TrendingUp} title="No subjects assigned" /></Card></>;
   const supabase = await createClient();
   const { data } = await supabase.from("results").select("student_id, exam_id, percentage, grade, passed, exams(name, published_at)").eq("offering_id", current.id);
   const rows = (data ?? []) as unknown as { student_id: string; exam_id: string; percentage: number | null; grade: string; passed: boolean; exams: { name: string; published_at: string } }[];
@@ -29,11 +29,11 @@ export default async function ProgressPage({ searchParams }: { searchParams: Pro
   const dist = latest ? distribution(rows.filter((r) => r.exam_id === latest[0]).map((r) => r.grade)) : [];
   return (
     <>
-      <PageHeader title="Academic progress" description="Based only on officially published results for your courses." />
+      <PageHeader title="Academic progress" description="Based only on officially published results for your subjects." />
       <FilterBar className="mb-6" placeholder="Search" q={undefined}>
-        <FilterSelect name="offering" value={current.id} label="Course" options={offerings.map((o) => ({ value: o.id, label: `${offeringLabel(o)} (${o.batches?.name})` }))} />
+        <FilterSelect name="offering" value={current.id} label="Subject" options={offerings.map((o) => ({ value: o.id, label: `${offeringLabel(o)} (${o.batches?.name})` }))} />
       </FilterBar>
-      {rows.length === 0 ? <Card><EmptyState icon={TrendingUp} title="No published results for this course yet" /></Card> : (
+      {rows.length === 0 ? <Card><EmptyState icon={TrendingUp} title="No published results for this subject yet" /></Card> : (
         <div className="space-y-6">
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
             <StatCard label="Published examinations" value={perExam.length} />

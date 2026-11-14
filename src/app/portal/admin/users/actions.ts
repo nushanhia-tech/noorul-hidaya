@@ -33,7 +33,7 @@ const studentFields = z.object({
 const facultyFields = z.object({
   employee_no: z.string().trim().max(40).optional().transform((v) => v || autoNo("EMP")),
   department_id: uuidOpt,
-  designation: z.string().trim().max(120).optional().transform((v) => v || "Faculty"),
+  designation: z.string().trim().max(120).optional().transform((v) => v || "Teachers"),
   joined_on: opt(z.string()),
   is_hod: z.string().optional().transform((v) => v === "on"),
   is_public: z.string().optional().transform((v) => v === "on"),
@@ -157,7 +157,7 @@ export async function saveStudentRecord(userId: string, _: ActionResult, fd: For
     must(await db.from("students").upsert({ ...data, profile_id: userId }, { onConflict: "profile_id" }));
     const n = await enrolInBatchOfferings(db, userId);
     revalidatePath(`/portal/admin/users/${userId}`);
-    return { ok: true, message: data.batch_id ? `Student record saved. Enrolled in ${n} course(s) of the batch.` : "Student record saved. Choose a batch to enrol the student in its courses." };
+    return { ok: true, message: data.batch_id ? `Student record saved. Enrolled in ${n} course(s) of the batch.` : "Student record saved. Choose a division to enrol the student in its subjects." };
   } catch (e) { return toActionError(e); }
 }
 
@@ -169,7 +169,7 @@ export async function saveFacultyRecord(userId: string, _: ActionResult, fd: For
     must(await db.from("faculty").upsert({ ...data, profile_id: userId }, { onConflict: "profile_id" }));
     revalidatePath(`/portal/admin/users/${userId}`);
     revalidatePath("/faculty");
-    return { ok: true, message: "Faculty record saved." };
+    return { ok: true, message: "Teacher record saved." };
   } catch (e) { return toActionError(e); }
 }
 

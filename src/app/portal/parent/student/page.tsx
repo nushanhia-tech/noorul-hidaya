@@ -22,9 +22,9 @@ export default async function LinkedStudentPage({ searchParams }: { searchParams
             </CardBody>
             <CardBody>
               <KeyValue items={[
-                { label: "Register number", value: current.register_no }, { label: "Programme", value: current.programme },
-                { label: "Department", value: current.department }, { label: "Batch", value: current.batch },
-                { label: "Current semester", value: current.current_semester },
+                { label: "Register number", value: current.register_no }, { label: "Class", value: current.programme },
+                { label: "Department", value: current.department }, { label: "Division", value: current.batch },
+                { label: "Current term", value: current.current_semester },
               ]} />
             </CardBody>
           </Card>

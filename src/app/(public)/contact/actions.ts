@@ -24,7 +24,7 @@ export async function sendContactMessage(_: ActionResult, fd: FormData): Promise
       name: data.name, email: data.email, phone: data.phone || null, subject: data.subject, message: data.message,
     });
     if (error) throw error;
-    return { ok: true, message: "Thank you. Your message has been sent to the college office." };
+    return { ok: true, message: "Thank you. Your message has been sent to the school office." };
   } catch (e) {
     return toActionError(e);
   }

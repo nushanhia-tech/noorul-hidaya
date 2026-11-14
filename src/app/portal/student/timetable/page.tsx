@@ -16,7 +16,7 @@ export default async function StudentTimetable() {
   });
   return (
     <>
-      <PageHeader title="Timetable" description={`${offerings[0]?.terms?.name ?? "Current term"} · Semester ${student.current_semester}`} />
+      <PageHeader title="Timetable" description={`${offerings[0]?.terms?.name ?? "Current term"} · Term ${student.current_semester}`} />
       <WeekTimetable entries={entries} today={isoWeekday()} />
     </>
   );

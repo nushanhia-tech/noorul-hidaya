@@ -38,7 +38,7 @@ export function LetterForm({ inward, departments, files, templates, vars, defaul
           <F name="sender_address" label="Sender address" className="sm:col-span-2"><Textarea name="sender_address" rows={2} /></F>
           <F name="letter_date" label="Letter date" required><Input name="letter_date" type="date" required /></F>
           <F name="received_on" label="Received on" required><Input name="received_on" type="date" defaultValue={today} required /></F>
-          <F name="recipient_name" label="Addressed to (within college)"><Input name="recipient_name" placeholder="e.g. The Principal" /></F>
+          <F name="recipient_name" label="Addressed to (within school)"><Input name="recipient_name" placeholder="e.g. The Principal" /></F>
         </>
       ) : (
         <>

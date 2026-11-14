@@ -27,7 +27,7 @@ function MetaFields({ d }: { d?: { title: string; description: string; resource_
 export function UploadForm({ options, defaultOffering }: { options: { value: string; label: string }[]; defaultOffering?: string }) {
   return (
     <ActionForm action={uploadResource} resetOnSuccess className="space-y-4">
-      <F name="offering_id" label="Course" required>
+      <F name="offering_id" label="Subject" required>
         <Select id="offering_id" name="offering_id" defaultValue={defaultOffering ?? options[0]?.value}>{options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</Select>
       </F>
       <MetaFields />

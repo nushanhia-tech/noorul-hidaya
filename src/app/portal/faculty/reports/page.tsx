@@ -29,13 +29,13 @@ export default async function FacultyReports() {
   }).sort((a, b) => (b.published ?? "").localeCompare(a.published ?? ""));
   return (
     <>
-      <PageHeader title="Academic reports" description="Course-wise examination summaries from published results. Download a full result sheet as CSV." />
+      <PageHeader title="Academic reports" description="Subject-wise examination summaries from published results. Download a full result sheet as CSV." />
       <Card>
         <CardHeader title="Examination summaries" />
         <DataTable rows={summary} rowKey={(r) => r.key} empty={<EmptyState icon={ChartColumn} title="No published results yet" />}
           columns={[
-            { key: "course", header: "Course", primary: true, cell: (r) => r.course },
-            { key: "batch", header: "Batch", cell: (r) => r.batch },
+            { key: "course", header: "Subject", primary: true, cell: (r) => r.course },
+            { key: "batch", header: "Division", cell: (r) => r.batch },
             { key: "exam", header: "Examination", cell: (r) => <span>{r.exam}<span className="block text-xs text-faint">{formatDate(r.published)}</span></span> },
             { key: "n", header: "Students", align: "right", cell: (r) => r.n },
             { key: "avg", header: "Avg %", align: "right", cell: (r) => r.avg },

@@ -27,14 +27,14 @@ export default async function StudentResults() {
           <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-3">
             <StatCard label="Published examinations" value={groups.length} />
             <StatCard label="Papers passed" value={`${rows.filter((r) => r.passed).length}/${rows.length}`} />
-            <StatCard label="CGPA (semester exams)" value={overall ?? "—"} hint="Credit-weighted, 10-point scale" />
+            <StatCard label="CGPA (term exams)" value={overall ?? "—"} hint="Credit-weighted, 10-point scale" />
           </div>
           <div className="space-y-6">
             {groups.map((g) => (
               <Card key={g.examId}>
                 <CardHeader
                   title={g.name}
-                  description={`${g.term} · Semester ${g.semester}`}
+                  description={`${g.term} · Term ${g.semester}`}
                   action={
                     <div className="flex items-center gap-2">
                       {g.sgpa !== null && <Badge tone="teal">SGPA {g.sgpa}</Badge>}

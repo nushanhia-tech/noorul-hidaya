@@ -25,7 +25,7 @@ export default async function ParentResults({ searchParams }: { searchParams: Pr
         <div className="space-y-6">
           {groups.map((g) => (
             <Card key={g.examId}>
-              <CardHeader title={g.name} description={`${g.term} · Semester ${g.semester}`} action={
+              <CardHeader title={g.name} description={`${g.term} · Term ${g.semester}`} action={
                 <div className="flex items-center gap-2">
                   {g.sgpa !== null && <Badge tone="teal">SGPA {g.sgpa}</Badge>}
                   <a href={`/api/reports/results?exam=${g.examId}&student=${current.student_id}`} className="inline-flex h-8 items-center gap-1.5 rounded-sm border border-line-strong bg-white px-2.5 text-[13px]"><Download className="h-3.5 w-3.5" /> PDF</a>

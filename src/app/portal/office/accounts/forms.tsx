@@ -28,11 +28,11 @@ export function StructureForm({ programmes, years, heads }: { programmes: O[]; y
   const total = sumStructure(rows.map((r) => ({ amount: Number(r.amount) || 0 })));
   return (
     <ActionForm action={A.createStructure} className="space-y-4">
-      <F name="name" label="Name" required><Input name="name" placeholder="Semester 1 fees" required /></F>
+      <F name="name" label="Name" required><Input name="name" placeholder="Term 1 fees" required /></F>
       <div className="grid gap-4 sm:grid-cols-2">
-        <F name="programme_id" label="Programme" required><Select name="programme_id" defaultValue="" required><option value="" disabled>Choose</option>{programmes.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</Select></F>
+        <F name="programme_id" label="Class" required><Select name="programme_id" defaultValue="" required><option value="" disabled>Choose</option>{programmes.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</Select></F>
         <F name="academic_year_id" label="Academic year" required><Select name="academic_year_id" required>{years.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}</Select></F>
-        <F name="semester_number" label="Semester"><Input name="semester_number" type="number" min={1} max={12} defaultValue={1} /></F>
+        <F name="semester_number" label="Term number"><Input name="semester_number" type="number" min={1} max={12} defaultValue={1} /></F>
         <F name="due_date" label="Due date" required><Input name="due_date" type="date" required /></F>
       </div>
       <fieldset className="space-y-2">
@@ -59,7 +59,7 @@ export function AssignStructureButton({ id }: { id: string }) {
   const [msg, setMsg] = useState<{ ok: boolean; t: string } | null>(null);
   return (
     <div>
-      <Button size="sm" variant="dark" disabled={pending} onClick={() => { if (confirm("Create invoices for all active students of this programme and semester?")) start(async () => { const r = await A.assignStructure(id); setMsg(r.ok ? { ok: true, t: r.message ?? "" } : { ok: false, t: r.error }); }); }}>Assign to students</Button>
+      <Button size="sm" variant="dark" disabled={pending} onClick={() => { if (confirm("Create invoices for all active students of this class and term?")) start(async () => { const r = await A.assignStructure(id); setMsg(r.ok ? { ok: true, t: r.message ?? "" } : { ok: false, t: r.error }); }); }}>Assign to students</Button>
       {msg && <Notice tone={msg.ok ? "success" : "danger"} className="mt-2">{msg.t}</Notice>}
     </div>
   );

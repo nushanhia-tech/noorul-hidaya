@@ -32,7 +32,7 @@ export default async function LedgerPage({ params }: { params: Promise<{ student
   for (const r of refunds ?? []) if (r.status !== "rejected") refundedBy.set(r.payment_id, (refundedBy.get(r.payment_id) ?? 0) + Number(r.amount));
   return (
     <>
-      <PageHeader eyebrow={p.register_no} title={`${p.profiles.full_name} — fee ledger`} description={`${p.programmes?.name ?? "No programme"} · Semester ${p.current_semester}`} back={{ href: "/portal/office/accounts/ledgers", label: "Student ledgers" }} />
+      <PageHeader eyebrow={p.register_no} title={`${p.profiles.full_name} — fee ledger`} description={`${p.programmes?.name ?? "No class"} · Term ${p.current_semester}`} back={{ href: "/portal/office/accounts/ledgers", label: "Student ledgers" }} />
       <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard label="Assigned" value={formatMoney(sum?.total_assigned ?? 0)} />
         <StatCard label="Concessions" value={formatMoney(sum?.total_concession ?? 0)} />

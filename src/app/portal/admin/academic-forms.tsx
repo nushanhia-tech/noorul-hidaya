@@ -71,7 +71,7 @@ export function ProgrammeForm({ d, id, departments }: { d?: D; id?: string; depa
       <F name="code" label="Code" required><Input name="code" defaultValue={v(d, "code")} required /></F>
       <F name="department_id" label="Department" required><Select name="department_id" defaultValue={v(d, "department_id")} required><option value="" disabled>Choose</option>{departments.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</Select></F>
       <F name="level" label="Level"><Select name="level" defaultValue={v(d, "level", "UG")}>{["UG", "PG", "Diploma", "Certificate", "Doctoral"].map((l) => <option key={l}>{l}</option>)}</Select></F>
-      <F name="duration_semesters" label="Semesters"><Input name="duration_semesters" type="number" min={1} max={12} defaultValue={v(d, "duration_semesters", 6)} /></F>
+      <F name="duration_semesters" label="Terms"><Input name="duration_semesters" type="number" min={1} max={12} defaultValue={v(d, "duration_semesters", 6)} /></F>
       <F name="intake" label="Annual intake"><Input name="intake" type="number" defaultValue={v(d, "intake")} /></F>
       <F name="summary" label="Summary" className="sm:col-span-2"><Input name="summary" defaultValue={v(d, "summary")} /></F>
       <F name="description" label="Description" className="sm:col-span-2"><Textarea name="description" rows={4} defaultValue={v(d, "description")} /></F>
@@ -88,9 +88,9 @@ export function CourseForm({ d, id, departments, programmes }: { d?: D; id?: str
       <F name="title" label="Title" required><Input name="title" defaultValue={v(d, "title")} required /></F>
       <F name="code" label="Code" required><Input name="code" defaultValue={v(d, "code")} required /></F>
       <F name="department_id" label="Department" required><Select name="department_id" defaultValue={v(d, "department_id")} required><option value="" disabled>Choose</option>{departments.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</Select></F>
-      <F name="programme_id" label="Programme"><Select name="programme_id" defaultValue={v(d, "programme_id")}><option value="">Shared / none</option>{programmes.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</Select></F>
+      <F name="programme_id" label="Class"><Select name="programme_id" defaultValue={v(d, "programme_id")}><option value="">Shared / none</option>{programmes.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</Select></F>
       <F name="credits" label="Credits"><Input name="credits" type="number" step="0.5" defaultValue={v(d, "credits", 4)} /></F>
-      <F name="semester_number" label="Semester"><Input name="semester_number" type="number" min={1} max={12} defaultValue={v(d, "semester_number")} /></F>
+      <F name="semester_number" label="Term number"><Input name="semester_number" type="number" min={1} max={12} defaultValue={v(d, "semester_number")} /></F>
       <F name="course_type" label="Type"><Select name="course_type" defaultValue={v(d, "course_type", "core")}>{["core", "elective", "common", "language", "practical"].map((t) => <option key={t}>{t}</option>)}</Select></F>
       <F name="description" label="Description" className="sm:col-span-2"><Textarea name="description" rows={2} defaultValue={v(d, "description")} /></F>
       <Checkbox name="is_active" defaultChecked={d ? Boolean(d.is_active) : true} label="Active" />
@@ -115,9 +115,9 @@ export function YearForm({ d, id }: { d?: D; id?: string }) {
 export function TermForm({ d, id, years }: { d?: D; id?: string; years: Opt[] }) {
   return (
     <ActionForm action={saveEntity.bind(null, "term", id ?? null)} resetOnSuccess={!id} className="grid gap-4 sm:grid-cols-2">
-      <F name="name" label="Name" required hint="e.g. Odd Semester 2026-27"><Input name="name" defaultValue={v(d, "name")} required /></F>
+      <F name="name" label="Name" required hint="e.g. Odd Term 2026-27"><Input name="name" defaultValue={v(d, "name")} required /></F>
       <F name="academic_year_id" label="Academic year" required><Select name="academic_year_id" defaultValue={v(d, "academic_year_id")} required><option value="" disabled>Choose</option>{years.map((y) => <option key={y.id} value={y.id}>{y.label}</option>)}</Select></F>
-      <F name="term_type" label="Term"><Select name="term_type" defaultValue={v(d, "term_type", "odd")}><option value="odd">Odd semester</option><option value="even">Even semester</option></Select></F>
+      <F name="term_type" label="Term"><Select name="term_type" defaultValue={v(d, "term_type", "odd")}><option value="odd">Odd term</option><option value="even">Even term</option></Select></F>
       <div />
       <F name="starts_on" label="Starts"><Input name="starts_on" type="date" defaultValue={v(d, "starts_on")} required /></F>
       <F name="ends_on" label="Ends"><Input name="ends_on" type="date" defaultValue={v(d, "ends_on")} required /></F>
@@ -131,9 +131,9 @@ export function BatchForm({ d, id, programmes }: { d?: D; id?: string; programme
   return (
     <ActionForm action={saveEntity.bind(null, "batch", id ?? null)} resetOnSuccess={!id} className="grid gap-4 sm:grid-cols-2">
       <F name="name" label="Name" required hint="e.g. BA Arabic 2026–29"><Input name="name" defaultValue={v(d, "name")} required /></F>
-      <F name="programme_id" label="Programme" required><Select name="programme_id" defaultValue={v(d, "programme_id")} required><option value="" disabled>Choose</option>{programmes.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</Select></F>
+      <F name="programme_id" label="Class" required><Select name="programme_id" defaultValue={v(d, "programme_id")} required><option value="" disabled>Choose</option>{programmes.map((x) => <option key={x.id} value={x.id}>{x.name}</option>)}</Select></F>
       <F name="start_year" label="Start year"><Input name="start_year" type="number" defaultValue={v(d, "start_year", new Date().getFullYear())} /></F>
-      <F name="current_semester" label="Current semester"><Input name="current_semester" type="number" min={1} max={12} defaultValue={v(d, "current_semester", 1)} /></F>
+      <F name="current_semester" label="Current term"><Input name="current_semester" type="number" min={1} max={12} defaultValue={v(d, "current_semester", 1)} /></F>
       <Checkbox name="is_active" defaultChecked={d ? Boolean(d.is_active) : true} label="Active" />
       <Actions id={id} kind="batch" />
     </ActionForm>

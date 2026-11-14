@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { saveNotice, deleteNotice } from "@/app/portal/notices-actions";
 
 type N = { id: string; title: string; body: string; category: string; audience: string[]; status: string; is_important: boolean; expires_on: string | null };
-const AUD = [["public", "Public website"], ["student", "Students"], ["faculty", "Faculty"], ["parent", "Parents"], ["office", "Office staff"]];
+const AUD = [["public", "Public website"], ["student", "Students"], ["faculty", "Teachers"], ["parent", "Parents"], ["office", "Office staff"]];
 
 export function NoticeForm({ n }: { n?: N }) {
   const [pending, start] = useTransition();

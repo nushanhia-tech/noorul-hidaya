@@ -36,7 +36,7 @@ export default async function LedgersPage({ searchParams }: { searchParams: Prom
           columns={[
             { key: "n", header: "Student", primary: true, cell: (r) => r.profiles.full_name },
             { key: "r", header: "Register no.", cell: (r) => <span className="tabular">{r.register_no}</span> },
-            { key: "p", header: "Programme", cell: (r) => r.programmes?.code ?? "—" },
+            { key: "p", header: "Class", cell: (r) => r.programmes?.code ?? "—" },
             { key: "a", header: "Assigned", align: "right", cell: (r) => formatMoney(r.bal?.total_assigned ?? 0) },
             { key: "pd", header: "Paid", align: "right", cell: (r) => formatMoney(r.bal?.total_paid ?? 0) },
             { key: "o", header: "Outstanding", align: "right", cell: (r) => <span className={Number(r.bal?.outstanding) > 0 ? "font-medium text-accent-700" : ""}>{formatMoney(r.bal?.outstanding ?? 0)}</span> },

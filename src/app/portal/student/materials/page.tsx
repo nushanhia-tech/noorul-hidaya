@@ -30,7 +30,7 @@ export default async function MaterialsPage({ searchParams }: { searchParams: Pr
     <>
       <PageHeader title="Study materials" description="Notes, slides and references shared by your teachers." />
       <FilterBar q={q} placeholder="Search materials" className="mb-5">
-        <FilterSelect name="course" value={course} label="Course" options={offerings.map((o) => ({ value: o.id, label: `${o.courses?.code} — ${o.courses?.title}` }))} />
+        <FilterSelect name="course" value={course} label="Subject" options={offerings.map((o) => ({ value: o.id, label: `${o.courses?.code} — ${o.courses?.title}` }))} />
         <FilterSelect name="kind" value={kind} label="Type" options={["notes","slides","reading","syllabus","question_bank","reference","other"].map((k) => ({ value: k, label: humanize(k) }))} />
       </FilterBar>
       <Card>

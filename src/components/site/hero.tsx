@@ -7,9 +7,9 @@ import type { HeroSlide } from "@/lib/data/public";
 import type { SiteSettings } from "@/lib/data/site";
 
 const QUICK_LINKS = [
-  { label: "Programmes", href: "/programmes", icon: GraduationCap, primary: true },
+  { label: "Classes", href: "/programmes", icon: GraduationCap, primary: true },
   { label: "Departments", href: "/departments", icon: Building2 },
-  { label: "Faculty", href: "/faculty", icon: BookOpen },
+  { label: "Teachers", href: "/faculty", icon: BookOpen },
   { label: "Events", href: "/events", icon: CalendarDays },
 ];
 

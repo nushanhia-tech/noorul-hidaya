@@ -10,7 +10,7 @@ export default async function EventsPage() {
   const [upcoming, past] = await Promise.all([getEvents("upcoming", 50), getEvents("past", 12)]);
   return (
     <>
-      <PageHero eyebrow="Campus life" title="Events" description="Seminars, celebrations, lectures and gatherings at the college." />
+      <PageHero eyebrow="Campus life" title="Events" description="Seminars, celebrations, lectures and gatherings at the school." />
       <Container className="grid gap-12 py-14 sm:py-20 lg:grid-cols-2">
         <section>
           <h2 className="mb-2 font-display text-2xl font-semibold">Upcoming</h2>

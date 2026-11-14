@@ -20,7 +20,7 @@ export default async function AcademicSetup() {
   ]);
   return (
     <>
-      <PageHeader title="Academic setup" description="Academic years, semester terms and student batches." />
+      <PageHeader title="Academic setup" description="Academic years, term terms and student divisions." />
       <div className="space-y-8">
         <section className="grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
           <Card>
@@ -46,14 +46,14 @@ export default async function AcademicSetup() {
         </section>
         <section className="grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
           <Card>
-            <CardHeader title="Batches" />
-            {(batches ?? []).length === 0 ? <EmptyState title="No batches" /> : (batches ?? []).map((b) => (
+            <CardHeader title="Divisions" />
+            {(batches ?? []).length === 0 ? <EmptyState title="No divisions" /> : (batches ?? []).map((b) => (
               <EditRow key={b.id} summary={<span className="flex flex-wrap items-center gap-3"><span className="font-medium">{b.name}</span><span className="text-xs text-muted">{(b.programmes as { name: string }).name} · Sem {b.current_semester} · {(b.students as { count: number }[])[0]?.count ?? 0} students</span>{!b.is_active && <Badge>Inactive</Badge>}</span>}>
                 <BatchForm d={b} id={b.id} programmes={lk.programmes} />
               </EditRow>
             ))}
           </Card>
-          <Card className="h-fit"><CardHeader title="Add batch" /><CardBody><BatchForm programmes={lk.programmes} /></CardBody></Card>
+          <Card className="h-fit"><CardHeader title="Add division" /><CardBody><BatchForm programmes={lk.programmes} /></CardBody></Card>
         </section>
       </div>
     </>

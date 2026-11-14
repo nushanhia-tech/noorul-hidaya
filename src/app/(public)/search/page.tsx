@@ -21,7 +21,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     ]);
     results = [
       { group: "Departments", items: (d.data ?? []).map((x) => ({ title: x.name, href: `/departments/${x.slug}`, sub: x.summary })) },
-      { group: "Programmes", items: (p.data ?? []).map((x) => ({ title: x.name, href: `/programmes/${x.slug}`, sub: x.level })) },
+      { group: "Classes", items: (p.data ?? []).map((x) => ({ title: x.name, href: `/programmes/${x.slug}`, sub: x.level })) },
       { group: "News", items: (n.data ?? []).map((x) => ({ title: x.title, href: `/news/${x.slug}`, sub: x.excerpt })) },
       { group: "Events", items: (e.data ?? []).map((x) => ({ title: x.title, href: `/events/${x.slug}`, sub: x.summary })) },
     ].filter((g) => g.items.length);
@@ -30,7 +30,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     <>
       <PageHero eyebrow="Search" title={q ? `Results for “${q}”` : "Search the website"} />
       <Container className="max-w-3xl py-12">
-        <FilterBar q={q} placeholder="Search programmes, departments, news…" />
+        <FilterBar q={q} placeholder="Search classes, departments, news…" />
         <div className="mt-10 space-y-10">
           {q && results.length === 0 && <EmptyState title="Nothing found" description="Try a shorter or different search term." />}
           {results.map((g) => (

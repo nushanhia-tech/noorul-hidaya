@@ -23,7 +23,7 @@ export default async function OfferingDetail({ params }: { params: Promise<{ id:
       <PageHeader eyebrow={off.terms.name} title={`${off.courses.code} · ${off.courses.title}`} back={{ href: "/portal/admin/offerings", label: "Offerings" }} />
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-6">
-          <Card><CardBody><KeyValue items={[{ label: "Batch", value: off.batches.name }, { label: "Semester", value: off.semester_number }, { label: "Credits", value: Number(off.courses.credits) }, { label: "Enrolled", value: off.enrolments[0]?.count ?? 0 }]} /><div className="mt-4"><SyncButton offeringId={id} /></div></CardBody></Card>
+          <Card><CardBody><KeyValue items={[{ label: "Division", value: off.batches.name }, { label: "Term", value: off.semester_number }, { label: "Credits", value: Number(off.courses.credits) }, { label: "Enrolled", value: off.enrolments[0]?.count ?? 0 }]} /><div className="mt-4"><SyncButton offeringId={id} /></div></CardBody></Card>
           <Card>
             <CardHeader title="Teachers" description="Only assigned teachers can see the class and enter marks." />
             <CardBody><FacultyAssign offeringId={id} options={fac} assigned={off.offering_faculty.map((f) => ({ value: f.faculty_id, label: f.faculty.profiles.full_name }))} /></CardBody>
@@ -38,7 +38,7 @@ export default async function OfferingDetail({ params }: { params: Promise<{ id:
                 <SlotRemove offeringId={id} slotId={s.id} />
               </li>
             ))}
-            {!slots?.length && <li className="px-5 py-4 text-sm text-muted">No classes scheduled yet.</li>}
+            {!slots?.length && <li className="px-5 py-4 text-sm text-muted">No periods scheduled yet.</li>}
           </ul>
           <CardBody className="border-t border-line"><SlotForm offeringId={id} /></CardBody>
         </Card>

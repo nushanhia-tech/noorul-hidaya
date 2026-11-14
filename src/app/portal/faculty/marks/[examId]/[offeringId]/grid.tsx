@@ -37,7 +37,7 @@ export function MarksGrid({ examId, offeringId, max, students, editable }: { exa
     else { setMsg({ ok: false, text: res.error }); setServerErrors(res.fieldErrors ?? {}); }
   });
 
-  if (!students.length) return <Notice tone="warning">No students are enrolled in this course offering.</Notice>;
+  if (!students.length) return <Notice tone="warning">No students are enrolled in this subject offering.</Notice>;
 
   return (
     <div className="space-y-4">

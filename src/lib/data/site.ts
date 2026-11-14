@@ -10,7 +10,7 @@ export type SiteSettings = {
 };
 
 export const DEFAULT_SETTINGS: SiteSettings = {
-  college_name: "Your College Name", short_name: "College", motto: "Knowledge with character", intro: "",
+  college_name: "Your School Name", short_name: "School", motto: "Knowledge with character", intro: "",
   logo_path: null, email: null, phone: null, address: null, map_url: null, established_year: null,
   affiliation: null, footer_text: null, social: {}, home_sections: ["intro","departments","programmes","achievements","announcements","news","events","gallery","calendar","faculty","contact"],
   currency: "INR", require_mfa_privileged: false, email_notifications: true, backup_notes: null,

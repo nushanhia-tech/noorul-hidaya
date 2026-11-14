@@ -12,7 +12,7 @@ export default async function DepartmentsPage() {
   const departments = await getDepartments();
   return (
     <>
-      <PageHero eyebrow="Departments" title="Our academic departments" description="Each department is home to its own faculty, programmes and scholarly community." />
+      <PageHero eyebrow="Departments" title="Our academic departments" description="Each department is home to its own teacher, classes and scholarly community." />
       <Container className="py-14 sm:py-20">
         {departments.length === 0 ? <EmptyState title="No departments published yet" /> : (
           <div className="grid gap-5 md:grid-cols-2">

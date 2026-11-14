@@ -14,7 +14,7 @@ export function AccountForms({ phone, emailNotifications }: { phone: string; ema
         <CardBody>
           <ActionForm action={updateContact} className="space-y-4">
             <F name="phone" label="Phone number"><Input id="phone" name="phone" type="tel" defaultValue={phone} autoComplete="tel" /></F>
-            <Checkbox name="email_notifications" defaultChecked={emailNotifications} label="Also send important notifications to my email (when email is configured by the college)" />
+            <Checkbox name="email_notifications" defaultChecked={emailNotifications} label="Also send important notifications to my email (when email is configured by the school)" />
             <SubmitButton variant="dark">Save</SubmitButton>
           </ActionForm>
         </CardBody>

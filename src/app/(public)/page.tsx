@@ -31,7 +31,7 @@ export default async function HomePage() {
           <div>
             <p className="eyebrow mb-3">About the institution</p>
             <h2 className="font-display text-[30px] font-semibold leading-[1.1] tracking-[-0.03em] sm:text-[42px]">
-              {about?.title && about.title !== "About the College" ? about.title : `A college shaped by learning and values.`}
+              {about?.title && about.title !== "About the School" ? about.title : `A school shaped by learning and values.`}
             </h2>
             {settings.established_year && (
               <p className="mt-6 inline-flex items-center gap-3 text-sm text-muted">
@@ -44,7 +44,7 @@ export default async function HomePage() {
               <RichText text={about.summary || about.body.slice(0, 900)} className="text-[17px]" />
             ) : (
               <p className="text-[17px] leading-relaxed text-muted">
-                The college introduction is written in Admin → Website → Pages → About.
+                The school introduction is written in Admin → Website → Pages → About.
               </p>
             )}
             <Link href="/about" className="group mt-7 inline-flex items-center gap-1.5 text-sm font-medium text-ink">
@@ -55,7 +55,7 @@ export default async function HomePage() {
       </section>
     ),
     departments: departments.length > 0 && (
-      <Section key="departments" eyebrow="Departments" title="Schools of thought, under one roof." description="Each department brings its own scholarly tradition, faculty and programmes." link={{ href: "/departments", label: "All departments" }}>
+      <Section key="departments" eyebrow="Departments" title="Schools of thought, under one roof." description="Each department brings its own scholarly tradition, teacher and classes." link={{ href: "/departments", label: "All departments" }}>
         <div className="grid gap-px overflow-hidden rounded-md border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
           {departments.slice(0, 6).map((d, i) => (
             <Link key={d.id} href={`/departments/${d.slug}`} className="group relative flex min-h-[190px] flex-col justify-between bg-paper p-6 transition-colors hover:bg-white sm:p-7">
@@ -71,7 +71,7 @@ export default async function HomePage() {
       </Section>
     ),
     programmes: programmes.length > 0 && (
-      <Section key="programmes" tone="paper" eyebrow="Academic programmes" title="Programmes of study" link={{ href: "/programmes", label: "Explore programmes" }}>
+      <Section key="programmes" tone="paper" eyebrow="Academic classes" title="Classes of study" link={{ href: "/programmes", label: "Explore classes" }}>
         <ul className="divide-y divide-line border-y border-line">
           {programmes.slice(0, 8).map((p) => (
             <li key={p.id}>
@@ -81,7 +81,7 @@ export default async function HomePage() {
                   <span className="block font-display text-lg font-semibold tracking-tight text-ink group-hover:underline sm:text-xl">{p.name}</span>
                   {p.departments?.name && <span className="text-sm text-muted">{p.departments.name}</span>}
                 </span>
-                <span className="text-sm text-muted">{p.duration_semesters / 2} years · {p.duration_semesters} semesters</span>
+                <span className="text-sm text-muted">{p.duration_semesters / 2} years · {p.duration_semesters} terms</span>
               </Link>
             </li>
           ))}
@@ -138,7 +138,7 @@ export default async function HomePage() {
       </Section>
     ),
     gallery: gallery.length > 0 && (
-      <Section key="gallery" tone="paper" eyebrow="Campus life" title="Life at the college" link={{ href: "/gallery", label: "Open gallery" }}>
+      <Section key="gallery" tone="paper" eyebrow="Campus life" title="Life at the school" link={{ href: "/gallery", label: "Open gallery" }}>
         <div className="grid grid-cols-2 gap-2.5 md:grid-cols-4">
           {gallery.slice(0, 8).map((g, i) => (
             <figure key={g.id} className={`group relative overflow-hidden rounded-sm bg-sand ${i === 0 ? "col-span-2 row-span-2 aspect-square md:aspect-auto" : "aspect-square"}`}>
@@ -166,7 +166,7 @@ export default async function HomePage() {
       </Section>
     ),
     faculty: featuredFaculty.length > 0 && (
-      <Section key="faculty" tone="paper" eyebrow="Faculty" title="Teachers and scholars" link={{ href: "/faculty", label: "Faculty directory" }}>
+      <Section key="faculty" tone="paper" eyebrow="Teachers" title="Teachers and scholars" link={{ href: "/faculty", label: "Teacher directory" }}>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {featuredFaculty.map((f) => (
             <div key={f.id} className="rounded-md border border-line bg-white p-5">

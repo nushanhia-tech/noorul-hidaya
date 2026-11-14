@@ -26,7 +26,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   pdf.title(sandbox ? "Test receipt (sandbox)" : "Fee receipt", `Receipt ${receipt.receipt_no}  |  Issued ${formatDateTime(receipt.issued_at)}`);
   pdf.keyValues([
     ["Student", st.profiles.full_name], ["Register number", st.register_no],
-    ["Programme", st.programmes?.name ?? "-"], ["Invoice", inv.invoice_no],
+    ["Class", st.programmes?.name ?? "-"], ["Invoice", inv.invoice_no],
   ]);
   pdf.table(["Description", "Method", "Reference", "Amount"], [[
     inv.title, PAYMENT_METHODS[p.method as keyof typeof PAYMENT_METHODS] ?? p.method,

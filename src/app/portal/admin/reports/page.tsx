@@ -54,9 +54,9 @@ export default async function AdminReports() {
         <CardHeader title="Department summary" />
         <DataTable rows={deptRows} rowKey={(r) => r.id} empty={<EmptyState title="No departments" />} columns={[
           { key: "n", header: "Department", primary: true, cell: (r) => r.name },
-          { key: "p", header: "Programmes", align: "right", cell: (r) => r.programmes },
-          { key: "c", header: "Courses", align: "right", cell: (r) => r.courses },
-          { key: "f", header: "Faculty", align: "right", cell: (r) => r.faculty },
+          { key: "p", header: "Classes", align: "right", cell: (r) => r.programmes },
+          { key: "c", header: "Subjects", align: "right", cell: (r) => r.courses },
+          { key: "f", header: "Teachers", align: "right", cell: (r) => r.faculty },
           { key: "s", header: "Students", align: "right", cell: (r) => r.students },
         ]} />
       </Card>

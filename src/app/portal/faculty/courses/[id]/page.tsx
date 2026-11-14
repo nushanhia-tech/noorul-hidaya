@@ -9,7 +9,7 @@ import { DataTable } from "@/components/ui/table";
 import { StatusBadge } from "@/components/ui/badge";
 import { formatDate, formatTime, humanize } from "@/lib/format";
 
-export const metadata = { title: "Course" };
+export const metadata = { title: "Subject" };
 
 export default async function CoursePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -28,7 +28,7 @@ export default async function CoursePage({ params }: { params: Promise<{ id: str
   const sheetStatus = new Map((sheets ?? []).map((s) => [s.exam_id, s.status]));
   return (
     <>
-      <PageHeader eyebrow={o.terms?.name} title={offeringLabel(o)} back={{ href: "/portal/faculty/courses", label: "My courses" }}
+      <PageHeader eyebrow={o.terms?.name} title={offeringLabel(o)} back={{ href: "/portal/faculty/courses", label: "My subjects" }}
         actions={<a href={`/api/export/class-list?offering=${o.id}`} className="inline-flex h-9 items-center gap-1.5 rounded-sm border border-line-strong bg-paper px-3 text-sm hover:bg-white"><Download className="h-4 w-4" /> Class list CSV</a>} />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <Card>
@@ -43,8 +43,8 @@ export default async function CoursePage({ params }: { params: Promise<{ id: str
         </Card>
         <div className="space-y-6">
           <Card><CardBody><KeyValue columns={1} items={[
-            { label: "Batch", value: o.batches?.name }, { label: "Programme", value: o.batches?.programmes?.name },
-            { label: "Semester", value: o.semester_number }, { label: "Credits", value: Number(o.courses?.credits) },
+            { label: "Division", value: o.batches?.name }, { label: "Class", value: o.batches?.programmes?.name },
+            { label: "Term", value: o.semester_number }, { label: "Credits", value: Number(o.courses?.credits) },
           ]} /></CardBody></Card>
           <Card>
             <CardHeader title="Examinations" />
@@ -65,7 +65,7 @@ export default async function CoursePage({ params }: { params: Promise<{ id: str
             )}
           </Card>
           <Card>
-            <CardHeader title="Course resources" action={<Link href={`/portal/faculty/resources?offering=${o.id}`} className="text-[13px] font-medium text-royal hover:underline">Manage</Link>} />
+            <CardHeader title="Subject resources" action={<Link href={`/portal/faculty/resources?offering=${o.id}`} className="text-[13px] font-medium text-royal hover:underline">Manage</Link>} />
             {(resources ?? []).length === 0 ? <EmptyState title="No resources shared" /> : (
               <ul className="divide-y divide-line">{(resources ?? []).map((r) => <li key={r.id} className="px-5 py-3 text-sm"><a href={`/api/resources/${r.id}`} className="font-medium hover:underline">{r.title}</a><span className="block text-xs text-muted">{humanize(r.resource_kind)} · {formatDate(r.created_at)}{!r.is_published && " · hidden"}</span></li>)}</ul>
             )}

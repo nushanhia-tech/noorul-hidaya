@@ -53,7 +53,7 @@ export function CompleteLink() {
     <div className="space-y-5">
       <Notice tone="danger" title="Link not valid">{error}</Notice>
       <p className="text-sm text-muted">
-        Ask the college office to set a password for you, then sign in with your email and password.
+        Ask the school office to set a password for you, then sign in with your email and password.
       </p>
       <div className="flex flex-wrap gap-2">
                 <Link href="/login" className={buttonClass("outline")}>Back to sign in</Link>

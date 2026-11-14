@@ -21,13 +21,13 @@ export default async function StructuresPage() {
   type S = { id: string; name: string; semester_number: number; due_date: string; programmes: { name: string; code: string }; academic_years: { label: string }; fee_structure_items: { amount: number; fee_heads: { name: string } }[]; invoices: { count: number }[] };
   return (
     <>
-      <PageHeader title="Fee structures" description="Course-wise and semester-wise fees, built from fee heads." />
+      <PageHeader title="Fee structures" description="Subject-wise and term-wise fees, built from fee heads." />
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
         <div className="space-y-4">
           {(structures ?? []).length === 0 && <Card><EmptyState title="No fee structures yet" /></Card>}
           {((structures ?? []) as unknown as S[]).map((s) => (
             <Card key={s.id}>
-              <CardHeader title={s.name} description={`${s.programmes.name} · Semester ${s.semester_number} · ${s.academic_years.label} · due ${formatDate(s.due_date)}`}
+              <CardHeader title={s.name} description={`${s.programmes.name} · Term ${s.semester_number} · ${s.academic_years.label} · due ${formatDate(s.due_date)}`}
                 action={<Badge tone="teal">{s.invoices[0]?.count ?? 0} assigned</Badge>} />
               <ul className="divide-y divide-line text-sm">
                 {s.fee_structure_items.map((i, n) => <li key={n} className="flex justify-between px-5 py-2"><span>{i.fee_heads.name}</span><span className="tabular">{formatMoney(i.amount)}</span></li>)}

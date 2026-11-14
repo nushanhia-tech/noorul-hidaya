@@ -14,7 +14,7 @@ export default async function ResetPage() {
       <PageHeader title="Full site reset" back={{ href: "/portal/admin/settings", label: "Settings" }}
         description="Start again with an empty system — for example after testing with demo data." />
       <Notice tone="danger" title="This permanently deletes everything" className="mb-6 max-w-3xl">
-        All students, faculty, parents and office staff accounts · departments, programmes, courses, timetables · marks and results ·
+        All students, teacher, parents and office staff accounts · departments, classes, subjects, timetables · marks and results ·
         fees, payments and receipts · office files, tasks, letters, help-desk tickets · website pages, news, events, gallery · every uploaded document and image.
         <br /><br /><strong>Kept:</strong> your own administrator account, and roles &amp; permissions. There is no undo — take a backup first (see docs/BACKUP_AND_RESTORE.md).
       </Notice>

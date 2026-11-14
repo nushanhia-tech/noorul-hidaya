@@ -26,14 +26,14 @@ export async function GET(request: NextRequest) {
   const e = ex as unknown as { name: string; published_at: string; terms: { name: string } };
   const pdf = await PdfBuilder.create(await getLetterhead());
   pdf.title("Statement of results", `${e.name}  |  ${e.terms?.name ?? ""}  |  Published ${formatDate(e.published_at)}`);
-  pdf.keyValues([["Student", s.profiles.full_name], ["Register number", s.register_no], ["Programme", s.programmes?.name ?? "-"], ["Statement date", formatDate(new Date())]]);
-  pdf.table(["Code", "Course", "Credits", "Marks", "Grade", "Result"],
+  pdf.keyValues([["Student", s.profiles.full_name], ["Register number", s.register_no], ["Class", s.programmes?.name ?? "-"], ["Statement date", formatDate(new Date())]]);
+  pdf.table(["Code", "Subject", "Credits", "Marks", "Grade", "Result"],
     rows.map((r) => [r.course_code, r.course_title, Number(r.credits), r.is_absent ? "AB" : `${Number(r.marks)}/${Number(r.max_marks)}`, r.grade, r.passed ? "Pass" : "Fail"]),
     [1, 3.4, 0.8, 1, 0.8, 0.8], ["left", "left", "right", "right", "right", "left"]);
   const g = sgpa(rows.map((r) => ({ credits: Number(r.credits), grade_point: Number(r.grade_point) })));
   pdf.text(`SGPA: ${g ?? "-"}   |   Papers passed: ${rows.filter((r) => r.passed).length} of ${rows.length}`, { size: 11, font: pdf.bold });
   pdf.space(20);
-  pdf.text("This statement reproduces officially published results. The college office issues signed mark lists on request.", { size: 8.5 });
+  pdf.text("This statement reproduces officially published results. The school office issues signed mark lists on request.", { size: 8.5 });
   pdf.footer(`Results - ${s.register_no}`);
   return pdfResponse(await pdf.bytes(), `results-${s.register_no}.pdf`);
 }

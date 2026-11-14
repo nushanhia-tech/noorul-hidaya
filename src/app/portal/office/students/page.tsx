@@ -34,8 +34,8 @@ export default async function StudentSearch({ searchParams }: { searchParams: Pr
           columns={[
             { key: "n", header: "Name", primary: true, cell: (r) => r.profiles.full_name },
             { key: "r", header: "Register no.", cell: (r) => <span className="tabular">{r.register_no}</span> },
-            { key: "p", header: "Programme", cell: (r) => r.programmes?.code ?? "—" },
-            { key: "s", header: "Semester", cell: (r) => r.current_semester },
+            { key: "p", header: "Class", cell: (r) => r.programmes?.code ?? "—" },
+            { key: "s", header: "Term", cell: (r) => r.current_semester },
             { key: "st", header: "Status", cell: (r) => <StatusBadge status={r.status} /> },
           ]} />
       </Card>

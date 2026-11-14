@@ -26,7 +26,7 @@ export async function createStructure(_: ActionResult, fd: FormData): Promise<Ac
   try {
     const me = await assertPermission("finance.structures");
     const d = z.object({
-      name: z.string().trim().min(3).max(120), programme_id: z.string().uuid("Choose a programme"), academic_year_id: z.string().uuid("Choose a year"),
+      name: z.string().trim().min(3).max(120), programme_id: z.string().uuid("Choose a class"), academic_year_id: z.string().uuid("Choose a year"),
       semester_number: z.coerce.number().int().min(1).max(12), due_date: z.string().min(1, "Due date required"),
     }).parse(Object.fromEntries(fd));
     const heads = fd.getAll("head_id").map(String);

@@ -10,7 +10,7 @@ export default async function ContactPage() {
   const s = await getSiteSettings();
   return (
     <>
-      <PageHero eyebrow="Contact" title="Get in touch" description="Write to the college office, or visit us during working hours." />
+      <PageHero eyebrow="Contact" title="Get in touch" description="Write to the school office, or visit us during working hours." />
       <Container className="grid gap-12 py-14 sm:py-20 lg:grid-cols-[1fr_1.3fr]">
         <div className="space-y-6">
           {[

@@ -13,7 +13,7 @@ export default async function SettingsPage() {
   const s = { ...DEFAULT_SETTINGS, ...(data ?? {}) } as SiteSettings;
   return (
     <>
-      <PageHeader title="Settings" description="College identity, contact details, website layout, security and backups." />
+      <PageHeader title="Settings" description="School identity, contact details, website layout, security and backups." />
       <SettingsForm s={s} />
     </>
   );

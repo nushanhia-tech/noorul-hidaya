@@ -4,7 +4,7 @@ test.describe("public website", () => {
   test("homepage renders the hero and quick links without horizontal overflow", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("h1").first()).toBeVisible();
-    await expect(page.getByRole("navigation", { name: "Quick links" }).getByRole("link", { name: "Programmes" })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Quick links" }).getByRole("link", { name: "Classes" })).toBeVisible();
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     expect(overflow).toBeLessThanOrEqual(1);
   });

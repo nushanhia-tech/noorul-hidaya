@@ -25,7 +25,7 @@ export async function timetableGridPdf(letterhead: Letterhead, pages: GridPage[]
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const bold = await doc.embedFont(StandardFonts.HelveticaBold);
-  for (const pg of pages.length ? pages : [{ title: "Timetable", subtitle: "No classes scheduled", slots: [] }]) {
+  for (const pg of pages.length ? pages : [{ title: "Timetable", subtitle: "No periods scheduled", slots: [] }]) {
     const page = doc.addPage([W, H]);
     page.drawRectangle({ x: M, y: H - M - 3, width: 26, height: 3, color: ACCENT });
     page.drawText(pdfSafe(letterhead.collegeName), { x: M, y: H - M - 20, size: 13, font: bold, color: INK });
@@ -60,7 +60,7 @@ export async function timetableGridPdf(letterhead: Letterhead, pages: GridPage[]
         }
       });
     });
-    if (!periods.length) page.drawText("No classes scheduled.", { x: M + 6, y: top - headH - 24, size: 10, font, color: MUTED });
+    if (!periods.length) page.drawText("No periods scheduled.", { x: M + 6, y: top - headH - 24, size: 10, font, color: MUTED });
     page.drawText(pdfSafe(`Printed ${new Date().toISOString().slice(0, 10)}`), { x: M, y: 14, size: 7.5, font, color: MUTED });
   }
   return doc.save();

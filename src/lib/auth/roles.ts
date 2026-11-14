@@ -13,7 +13,7 @@ export const PORTALS: Portal[] = ["student", "faculty", "parent", "admin", "offi
 
 export const ROLE_LABELS: Record<Role, string> = {
   student: "Student",
-  faculty: "Faculty",
+  faculty: "Teacher",
   parent: "Parent",
   admin: "Administrator",
   office_clerk: "Office Clerk",
@@ -24,7 +24,7 @@ export const ROLE_LABELS: Record<Role, string> = {
 
 export const PORTAL_LABELS: Record<Portal, string> = {
   student: "Student Portal",
-  faculty: "Faculty Portal",
+  faculty: "Teacher Portal",
   parent: "Parent Portal",
   admin: "Admin Portal",
   office: "Office Portal",

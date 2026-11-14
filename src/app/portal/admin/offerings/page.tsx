@@ -24,10 +24,10 @@ export default async function OfferingsPage({ searchParams }: { searchParams: Pr
     .sort((a, b) => a.batches.name.localeCompare(b.batches.name) || a.courses.code.localeCompare(b.courses.code));
   return (
     <>
-      <PageHeader title="Course offerings & timetable" description="Which course is taught to which batch in a term, by whom, and when." />
+      <PageHeader title="Subject offerings & timetable" description="Which subject is taught to which division in a term, by whom, and when." />
       <div className="mb-6 flex flex-wrap items-center gap-2 rounded-md border border-line bg-paper p-3">
         <span className="mr-1 text-sm font-medium">Download PDF:</span>
-        {[["class", sp.batch ? "Class-wise (selected batch)" : "Class-wise"], ["faculty", "Faculty-wise"], ["all", "All classes, subjects & teachers"]].map(([t, label]) => (
+        {[["class", sp.batch ? "Class-wise (selected division)" : "Class-wise"], ["faculty", "Teacher-wise"], ["all", "All classes, subjects & teachers"]].map(([t, label]) => (
           <a key={t} href={`/api/reports/timetable?type=${t}${term ? `&term=${term}` : ""}${t === "class" && sp.batch ? `&batch=${sp.batch}` : ""}`}
             className="inline-flex h-9 items-center gap-1.5 rounded-sm border border-line-strong bg-white px-3 text-sm hover:bg-ivory"><FileDown className="h-4 w-4" /> {label}</a>
         ))}
@@ -36,16 +36,16 @@ export default async function OfferingsPage({ searchParams }: { searchParams: Pr
         <div>
           <FilterBar className="mb-4" placeholder="—" q={undefined}>
             <FilterSelect name="term" value={term} label="Term" options={lk.terms.map((t) => ({ value: t.id, label: t.name }))} />
-            <FilterSelect name="batch" value={sp.batch} label="Batch" options={lk.batches.map((b) => ({ value: b.id, label: b.name }))} />
+            <FilterSelect name="batch" value={sp.batch} label="Division" options={lk.batches.map((b) => ({ value: b.id, label: b.name }))} />
           </FilterBar>
           <Card>
             <DataTable rows={rows} rowKey={(r) => r.id} rowHref={(r) => `/portal/admin/offerings/${r.id}`} empty={<EmptyState title="No offerings for this term" />}
               columns={[
-                { key: "c", header: "Course", primary: true, cell: (r) => <span><span className="tabular mr-2 text-faint">{r.courses.code}</span>{r.courses.title}</span> },
-                { key: "b", header: "Batch", cell: (r) => r.batches.name },
+                { key: "c", header: "Subject", primary: true, cell: (r) => <span><span className="tabular mr-2 text-faint">{r.courses.code}</span>{r.courses.title}</span> },
+                { key: "b", header: "Division", cell: (r) => r.batches.name },
                 { key: "f", header: "Teacher", cell: (r) => r.offering_faculty.map((f) => f.faculty.profiles.full_name).join(", ") || <span className="text-danger">Unassigned</span> },
                 { key: "s", header: "Students", align: "right", cell: (r) => r.enrolments[0]?.count ?? 0 },
-                { key: "t", header: "Classes/wk", align: "right", cell: (r) => r.timetable_slots[0]?.count ?? 0 },
+                { key: "t", header: "Periods/wk", align: "right", cell: (r) => r.timetable_slots[0]?.count ?? 0 },
               ]} />
           </Card>
         </div>
